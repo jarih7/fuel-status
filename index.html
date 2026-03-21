@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ceny paliv v ČR – Czech Fuel Prices</title>
+  <style>
+    /* ─── CSS reset & variables ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:   #11457E;
+      --red:    #D7141A;
+      --white:  #FFFFFF;
+      --bg:     #F4F6FA;
+      --card:   #FFFFFF;
+      --border: #DDE3EE;
+      --text:   #1A2340;
+      --muted:  #6B7591;
+      --green:  #1A7F4B;
+      --orange: #D97706;
+      --price-low:  #D1FAE5;
+      --price-high: #FEE2E2;
+      --price-mid:  #FEF3C7;
+      --shadow: 0 2px 10px rgba(17,69,126,.10);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─── */
+    header {
+      background: linear-gradient(135deg, var(--blue) 0%, #1a5fa8 100%);
+      color: var(--white);
+      padding: 1.5rem 1rem 1.2rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+      position: relative;
+    }
+
+    header::before {
+      content: "";
+      display: block;
+      height: 6px;
+      background: linear-gradient(90deg, var(--blue) 33.3%, var(--white) 33.3%, var(--white) 66.6%, var(--red) 66.6%);
+      position: absolute;
+      top: 0; left: 0; right: 0;
+    }
+
+    header h1 {
+      font-size: clamp(1.4rem, 4vw, 2.1rem);
+      font-weight: 700;
+      letter-spacing: .03em;
+      margin-top: .25rem;
+    }
+
+    header p.subtitle {
+      font-size: .95rem;
+      opacity: .85;
+      margin-top: .3rem;
+    }
+
+    /* ─── Main layout ─── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    /* ─── Stats cards ─── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--blue);
+      display: flex;
+      flex-direction: column;
+      gap: .25rem;
+    }
+
+    .stat-card.red   { border-top-color: var(--red); }
+    .stat-card.green { border-top-color: var(--green); }
+
+    .stat-card .label {
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--muted);
+    }
+
+    .stat-card .value {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .stat-card .value span {
+      font-size: .85rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    /* ─── Toolbar ─── */
+    .toolbar {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 1rem 1.2rem;
+      margin-bottom: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      align-items: center;
+    }
+
+    .toolbar input,
+    .toolbar select {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: .5rem .85rem;
+      font-size: .9rem;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .toolbar input { flex: 1 1 220px; }
+    .toolbar select { flex: 0 1 auto; }
+
+    .toolbar input:focus,
+    .toolbar select:focus { border-color: var(--blue); }
+
+    .toolbar label {
+      font-size: .8rem;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .toolbar .count-badge {
+      margin-left: auto;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 99px;
+      padding: .25rem .75rem;
+      font-size: .8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* ─── Table wrapper ─── */
+    .table-wrapper {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+
+    thead th {
+      background: var(--blue);
+      color: #fff;
+      padding: .8rem .9rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    thead th:hover { background: #1a5fa8; }
+
+    thead th .sort-icon {
+      display: inline-block;
+      margin-left: .35rem;
+      opacity: .55;
+      font-size: .75rem;
+    }
+
+    thead th.sorted-asc  .sort-icon { opacity: 1; }
+    thead th.sorted-desc .sort-icon { opacity: 1; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .12s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #F0F4FB; }
+
+    tbody td {
+      padding: .7rem .9rem;
+      vertical-align: middle;
+    }
+
+    /* station name cell */
+    td.station-name {
+      font-weight: 600;
+      min-width: 200px;
+    }
+
+    td.station-name .chain-badge {
+      display: inline-block;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      border-radius: 4px;
+      padding: .15rem .45rem;
+      margin-right: .4rem;
+      vertical-align: middle;
+    }
+
+    td.station-address {
+      color: var(--muted);
+      font-size: .82rem;
+      min-width: 160px;
+    }
+
+    td.price-cell {
+      font-weight: 700;
+      font-size: 1rem;
+      white-space: nowrap;
+      text-align: right;
+      min-width: 90px;
+    }
+
+    td.price-cell .unit {
+      font-size: .72rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-left: .15rem;
+    }
+
+    .price-low  { background: var(--price-low);  color: var(--green); }
+    .price-mid  { background: var(--price-mid);  color: var(--orange); }
+    .price-high { background: var(--price-high); color: var(--red); }
+
+    /* chain badge colours */
+    .badge-Benzina  { background: #fff3cd; color: #856404; }
+    .badge-Shell    { background: #fff0e6; color: #c44d00; }
+    .badge-OMV      { background: #e8f4e8; color: #1a6e1a; }
+    .badge-MOL      { background: #e6f0ff; color: #0055cc; }
+    .badge-EuroOil  { background: #f0e6ff; color: #6600cc; }
+    .badge-Globus   { background: #ffe6f0; color: #cc0055; }
+
+    /* ─── No results ─── */
+    .no-results {
+      padding: 2.5rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--blue); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── Updated notice ─── */
+    .updated-notice {
+      font-size: .8rem;
+      color: var(--muted);
+      text-align: right;
+      margin-bottom: .5rem;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 700px) {
+      td.station-address { display: none; }
+      thead th:nth-child(3) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⛽ Ceny paliv v České republice</h1>
+  <p class="subtitle">Czech Fuel Prices &mdash; Natural 95 &amp; Diesel</p>
+</header>
+
+<main>
+
+  <!-- Stats -->
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card">
+      <div class="label">Průměr Natural 95</div>
+      <div class="value" id="avgPetrol">—<span> Kč/l</span></div>
+    </div>
+    <div class="stat-card green">
+      <div class="label">Nejnižší Natural 95</div>
+      <div class="value" id="minPetrol">—<span> Kč/l</span></div>
+    </div>
+    <div class="stat-card red">
+      <div class="label">Nejdražší Natural 95</div>
+      <div class="value" id="maxPetrol">—<span> Kč/l</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Průměr Diesel</div>
+      <div class="value" id="avgDiesel">—<span> Kč/l</span></div>
+    </div>
+    <div class="stat-card green">
+      <div class="label">Nejnižší Diesel</div>
+      <div class="value" id="minDiesel">—<span> Kč/l</span></div>
+    </div>
+    <div class="stat-card red">
+      <div class="label">Nejdražší Diesel</div>
+      <div class="value" id="maxDiesel">—<span> Kč/l</span></div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input type="search" id="searchInput" placeholder="🔍  Hledat stanici, město…" aria-label="Hledat" />
+    <label for="regionSelect">Kraj:</label>
+    <select id="regionSelect" aria-label="Filtrovat podle kraje">
+      <option value="">Všechny kraje</option>
+    </select>
+    <label for="chainSelect">Řetězec:</label>
+    <select id="chainSelect" aria-label="Filtrovat podle řetězce">
+      <option value="">Všechny řetězce</option>
+    </select>
+    <label for="sortSelect">Řadit:</label>
+    <select id="sortSelect" aria-label="Způsob řazení">
+      <option value="petrol_95-asc">Natural 95 ↑</option>
+      <option value="petrol_95-desc">Natural 95 ↓</option>
+      <option value="diesel-asc">Diesel ↑</option>
+      <option value="diesel-desc">Diesel ↓</option>
+      <option value="name-asc">Název A–Z</option>
+      <option value="city-asc">Město A–Z</option>
+    </select>
+    <span class="count-badge" id="countBadge">0 stanic</span>
+  </div>
+
+  <!-- Last updated -->
+  <p class="updated-notice" id="updatedNotice"></p>
+
+  <!-- Table -->
+  <div class="table-wrapper">
+    <table id="pricesTable" aria-label="Ceny paliv na českých benzinových stanicích">
+      <thead>
+        <tr>
+          <th data-col="name">Stanice / Řetězec <span class="sort-icon">⇅</span></th>
+          <th data-col="city">Město <span class="sort-icon">⇅</span></th>
+          <th data-col="address">Adresa <span class="sort-icon">⇅</span></th>
+          <th data-col="petrol_95" class="sorted-asc">Natural 95 <span class="sort-icon">↑</span></th>
+          <th data-col="diesel">Diesel <span class="sort-icon">⇅</span></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr><td colspan="5" class="no-results">Načítání dat…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  Data: <a href="https://www.tank-ono.cz/cz/index.php?page=cenik" target="_blank" rel="noopener">tank-ono.cz</a> &mdash;
+  Ceny jsou orientační a mohou se lišit od aktuálních cen na čerpací stanici.
+  Automaticky aktualizováno každých 24 hodin.
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  let allStations = [];
+  let sortCol = "petrol_95";
+  let sortDir = "asc";
+
+  /* ── fetch data ── */
+  fetch("data/prices.json")
+    .then(r => {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    })
+    .then(data => init(data))
+    .catch(err => {
+      document.getElementById("tableBody").innerHTML =
+        '<tr><td colspan="5" class="no-results">Chyba při načítání dat: ' +
+        escHtml(String(err)) + "</td></tr>";
+    });
+
+  function init(data) {
+    allStations = data.stations || [];
+
+    /* last updated */
+    const notice = document.getElementById("updatedNotice");
+    if (data.last_updated) {
+      const d = new Date(data.last_updated);
+      notice.textContent =
+        "Poslední aktualizace: " + d.toLocaleString("cs-CZ", {
+          day: "2-digit", month: "2-digit", year: "numeric",
+          hour: "2-digit", minute: "2-digit"
+        });
+    }
+
+    /* populate filter dropdowns */
+    const regions = [...new Set(allStations.map(s => s.region))].sort();
+    const chains  = [...new Set(allStations.map(s => s.chain))].sort();
+
+    const regionSel = document.getElementById("regionSelect");
+    regions.forEach(r => {
+      const o = document.createElement("option");
+      o.value = r; o.textContent = r;
+      regionSel.appendChild(o);
+    });
+
+    const chainSel = document.getElementById("chainSelect");
+    chains.forEach(c => {
+      const o = document.createElement("option");
+      o.value = c; o.textContent = c;
+      chainSel.appendChild(o);
+    });
+
+    /* compute stat boundaries for colour coding */
+    updateStats(allStations);
+    render();
+  }
+
+  /* ── event listeners ── */
+  document.getElementById("searchInput").addEventListener("input", render);
+  document.getElementById("regionSelect").addEventListener("change", render);
+  document.getElementById("chainSelect").addEventListener("change", render);
+  document.getElementById("sortSelect").addEventListener("change", function () {
+    const [col, dir] = this.value.split("-");
+    sortCol = col; sortDir = dir;
+    syncHeaderSort();
+    render();
+  });
+
+  /* column header click → sort */
+  document.querySelectorAll("thead th[data-col]").forEach(th => {
+    th.addEventListener("click", function () {
+      const col = this.dataset.col;
+      if (sortCol === col) {
+        sortDir = sortDir === "asc" ? "desc" : "asc";
+      } else {
+        sortCol = col; sortDir = "asc";
+      }
+      syncHeaderSort();
+      syncSortSelect();
+      render();
+    });
+  });
+
+  function syncHeaderSort() {
+    document.querySelectorAll("thead th[data-col]").forEach(th => {
+      th.classList.remove("sorted-asc", "sorted-desc");
+      const icon = th.querySelector(".sort-icon");
+      if (th.dataset.col === sortCol) {
+        th.classList.add(sortDir === "asc" ? "sorted-asc" : "sorted-desc");
+        icon.textContent = sortDir === "asc" ? "↑" : "↓";
+      } else {
+        icon.textContent = "⇅";
+      }
+    });
+  }
+
+  function syncSortSelect() {
+    const sel = document.getElementById("sortSelect");
+    const target = sortCol + "-" + sortDir;
+    const opt = sel.querySelector('option[value="' + target + '"]');
+    if (opt) sel.value = target;
+  }
+
+  /* ── stats ── */
+  function updateStats(stations) {
+    if (!stations.length) return;
+    const p95  = stations.map(s => s.petrol_95).filter(v => v > 0);
+    const dies = stations.map(s => s.diesel).filter(v => v > 0);
+
+    const avg = arr => (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(2);
+    const min = arr => Math.min(...arr).toFixed(2);
+    const max = arr => Math.max(...arr).toFixed(2);
+
+    setText("avgPetrol", avg(p95));
+    setText("minPetrol", min(p95));
+    setText("maxPetrol", max(p95));
+    setText("avgDiesel", avg(dies));
+    setText("minDiesel", min(dies));
+    setText("maxDiesel", max(dies));
+  }
+
+  function setText(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = val + '<span> Kč/l</span>';
+  }
+
+  /* ── filter + sort + render ── */
+  function render() {
+    const query  = document.getElementById("searchInput").value.toLowerCase();
+    const region = document.getElementById("regionSelect").value;
+    const chain  = document.getElementById("chainSelect").value;
+
+    let filtered = allStations.filter(s => {
+      if (region && s.region !== region) return false;
+      if (chain  && s.chain  !== chain)  return false;
+      if (query) {
+        const hay = (s.name + " " + s.city + " " + s.address + " " + s.chain).toLowerCase();
+        if (!hay.includes(query)) return false;
+      }
+      return true;
+    });
+
+    /* sort */
+    filtered.sort((a, b) => {
+      let va = a[sortCol], vb = b[sortCol];
+      if (typeof va === "string") va = va.toLowerCase();
+      if (typeof vb === "string") vb = vb.toLowerCase();
+      if (va < vb) return sortDir === "asc" ? -1 : 1;
+      if (va > vb) return sortDir === "asc" ?  1 : -1;
+      return 0;
+    });
+
+    /* colour-code prices based on full dataset */
+    const p95vals  = allStations.map(s => s.petrol_95).filter(v => v > 0);
+    const dievals  = allStations.map(s => s.diesel).filter(v => v > 0);
+    const p95min = Math.min(...p95vals), p95max = Math.max(...p95vals);
+    const dmin   = Math.min(...dievals), dmax   = Math.max(...dievals);
+
+    const priceClass = (val, min, max) => {
+      const pct = (val - min) / (max - min || 1);
+      if (pct <= 0.33) return "price-low";
+      if (pct <= 0.66) return "price-mid";
+      return "price-high";
+    };
+
+    /* build rows */
+    const badge = chain =>
+      `<span class="chain-badge badge-${escHtml(chain)}">${escHtml(chain)}</span>`;
+
+    const rows = filtered.map(s =>
+      `<tr>
+        <td class="station-name">${badge(s.chain)}${escHtml(s.name)}</td>
+        <td>${escHtml(s.city)}</td>
+        <td class="station-address">${escHtml(s.address)}</td>
+        <td class="price-cell ${priceClass(s.petrol_95, p95min, p95max)}">
+          ${s.petrol_95.toFixed(2)}<span class="unit">Kč/l</span>
+        </td>
+        <td class="price-cell ${priceClass(s.diesel, dmin, dmax)}">
+          ${s.diesel.toFixed(2)}<span class="unit">Kč/l</span>
+        </td>
+      </tr>`
+    ).join("");
+
+    document.getElementById("tableBody").innerHTML =
+      rows || '<tr><td colspan="5" class="no-results">Žádné stanice neodpovídají filtru.</td></tr>';
+
+    document.getElementById("countBadge").textContent =
+      filtered.length + " " + (filtered.length === 1 ? "stanice" : filtered.length < 5 ? "stanice" : "stanic");
+
+    /* update stats to reflect filtered set */
+    updateStats(filtered.length ? filtered : allStations);
+  }
+
+  /* ── helpers ── */
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+})();
+</script>
+</body>
+</html>
