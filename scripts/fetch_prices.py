@@ -5,6 +5,11 @@ fetch_prices.py – Scrape Czech fuel station prices from:
                                URL: https://www.tank-ono.cz/cz/index.php?page=cenik
                                Single-page CZK price table; confirmed working structure.
   2. mbenzin.cz   (secondary) – price aggregator; flexible multi-strategy parsing.
+  3. ccs.cz       – CCS fleet-card network; flexible multi-strategy parsing.
+  4. orlen.cz     – Orlen Czech Republic stations; flexible multi-strategy parsing.
+  5. omv.cz       – OMV Czech Republic stations; flexible multi-strategy parsing.
+  6. fuelto.net   – price aggregator; flexible multi-strategy parsing.
+  7. ipumpuj.cz   – price aggregator; flexible multi-strategy parsing.
 
 Writes combined results to data/prices.json.
 """
@@ -319,7 +324,8 @@ def scrape_mbenzin() -> list[dict]:
     if not stations:
         for script in soup.find_all("script"):
             text = script.string or ""
-            if any(k in text.lower() for k in ("benzin", "petrol", "nafta", "diesel")):
+            text_lower = text.lower()
+            if any(k in text_lower for k in ("benzin", "petrol", "nafta", "diesel")):
                 stations.extend(_extract_json_stations(text))
 
     print(f"  mbenzin.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
@@ -387,7 +393,9 @@ def _parse_mbenzin_card(element) -> dict | None:
     }
 
 
-def _extract_json_stations(script_text: str) -> list[dict]:
+def _extract_json_stations(
+    script_text: str, chain_override: str | None = None
+) -> list[dict]:
     out: list[dict] = []
     for m in re.findall(r"\[(\{.+?\})\]", script_text, re.DOTALL):
         try:
@@ -405,7 +413,7 @@ def _extract_json_stations(script_text: str) -> list[dict]:
                 _, region = city_and_region(city or name)
                 out.append({
                     "name":         name,
-                    "chain":        infer_chain(name),
+                    "chain":        chain_override or infer_chain(name),
                     "city":         city,
                     "region":       region,
                     "address":      item.get("address") or item.get("adresa", ""),
@@ -416,6 +424,313 @@ def _extract_json_stations(script_text: str) -> list[dict]:
     return out
 
 
+# ── ccs.cz ────────────────────────────────────────────────────────────────────
+
+_CCS_URLS = [
+    "https://www.ccs.cz/cs/kde-tankujete/stanice",
+    "https://www.ccs.cz/stanice",
+    "https://ccs.cz/cs/kde-tankujete",
+    "https://www.ccs.cz/",
+]
+
+
+def scrape_ccs() -> list[dict]:
+    """
+    Attempt to scrape fuel prices from ccs.cz.
+    Uses three fallback strategies:
+      1. HTML table rows
+      2. div/li card elements
+      3. JSON data embedded in <script> tags
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching ccs.cz …", file=sys.stderr)
+    soup, used_url = _fetch_first(
+        _CCS_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.ccs.cz/"},
+    )
+    if soup is None:
+        print("  [WARN] ccs.cz: no URL responded successfully", file=sys.stderr)
+        return []
+
+    stations = _generic_scrape(soup, chain_override="CCS")
+    print(f"  ccs.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
+# ── orlen.cz ──────────────────────────────────────────────────────────────────
+
+_ORLEN_URLS = [
+    "https://www.orlen.cz/stanice",
+    "https://www.orlen.cz/cs/stanice/",
+    "https://orlen.cz/stanice",
+    "https://www.orlen.cz/",
+]
+
+
+def scrape_orlen() -> list[dict]:
+    """
+    Attempt to scrape fuel prices from orlen.cz.
+    Uses three fallback strategies:
+      1. HTML table rows
+      2. div/li card elements
+      3. JSON data embedded in <script> tags
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching orlen.cz …", file=sys.stderr)
+    soup, used_url = _fetch_first(
+        _ORLEN_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.orlen.cz/"},
+    )
+    if soup is None:
+        print("  [WARN] orlen.cz: no URL responded successfully", file=sys.stderr)
+        return []
+
+    stations = _generic_scrape(soup, chain_override="Orlen")
+    print(f"  orlen.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
+# ── omv.cz ────────────────────────────────────────────────────────────────────
+
+_OMV_URLS = [
+    "https://www.omv.cz/",
+    "https://omv.cz/",
+    "https://www.omv.com/cs-cz/stanice",
+    "https://www.omv.com/cs-cz",
+]
+
+
+def scrape_omv() -> list[dict]:
+    """
+    Attempt to scrape fuel prices from omv.com (Czech locale) or omv.cz.
+    Uses three fallback strategies:
+      1. HTML table rows
+      2. div/li card elements
+      3. JSON data embedded in <script> tags
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching omv.cz …", file=sys.stderr)
+    soup, used_url = _fetch_first(
+        _OMV_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.omv.com/"},
+    )
+    if soup is None:
+        print("  [WARN] omv.cz: no URL responded successfully", file=sys.stderr)
+        return []
+
+    stations = _generic_scrape(soup, chain_override="OMV")
+    print(f"  omv.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
+# ── fuelto.net ────────────────────────────────────────────────────────────────
+
+_FUELTO_URLS = [
+    "https://www.fuelto.net/",
+    "https://fuelto.net/",
+    "https://www.fuelto.net/cz/",
+    "https://www.fuelto.net/cs/",
+]
+
+
+def scrape_fuelto() -> list[dict]:
+    """
+    Attempt to scrape fuel prices from fuelto.net.
+    Uses three fallback strategies:
+      1. HTML table rows
+      2. div/li card elements
+      3. JSON data embedded in <script> tags
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching fuelto.net …", file=sys.stderr)
+    soup, used_url = _fetch_first(
+        _FUELTO_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.fuelto.net/"},
+    )
+    if soup is None:
+        print("  [WARN] fuelto.net: no URL responded successfully", file=sys.stderr)
+        return []
+
+    stations = _generic_scrape(soup)
+    print(f"  fuelto.net ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
+# ── ipumpuj.cz ────────────────────────────────────────────────────────────────
+
+_IPUMPUJ_URLS = [
+    "https://www.ipumpuj.cz/",
+    "https://ipumpuj.cz/",
+    "https://www.ipumpuj.cz/stanice/",
+    "https://www.ipumpuj.cz/cerpaci-stanice/",
+]
+
+
+def scrape_ipumpuj() -> list[dict]:
+    """
+    Attempt to scrape fuel prices from ipumpuj.cz.
+    Uses three fallback strategies:
+      1. HTML table rows
+      2. div/li card elements
+      3. JSON data embedded in <script> tags
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching ipumpuj.cz …", file=sys.stderr)
+    soup, used_url = _fetch_first(
+        _IPUMPUJ_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.ipumpuj.cz/"},
+    )
+    if soup is None:
+        print("  [WARN] ipumpuj.cz: no URL responded successfully", file=sys.stderr)
+        return []
+
+    stations = _generic_scrape(soup)
+    print(f"  ipumpuj.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
+# ── generic multi-strategy helpers ────────────────────────────────────────────
+
+def _fetch_first(
+    urls: list[str],
+    min_bytes: int = 2000,
+    extra_headers: dict | None = None,
+) -> tuple[BeautifulSoup | None, str | None]:
+    """
+    Try each URL in order; return (soup, url) for the first successful response,
+    or (None, None) if none succeed.
+    """
+    hdrs = {**HEADERS, **(extra_headers or {})}
+    for url in urls:
+        try:
+            resp = requests.get(url, headers=hdrs, timeout=20, allow_redirects=True)
+            if resp.status_code == 200 and len(resp.text) >= min_bytes:
+                resp.encoding = resp.apparent_encoding or "utf-8"
+                soup = BeautifulSoup(resp.text, "html.parser")
+                print(f"    Loaded {url} ({len(resp.text):,} bytes)", file=sys.stderr)
+                return soup, url
+        except requests.RequestException as exc:
+            print(f"    [WARN] {url} → {exc}", file=sys.stderr)
+    return None, None
+
+
+def _generic_scrape(
+    soup: BeautifulSoup,
+    chain_override: str | None = None,
+) -> list[dict]:
+    """
+    Apply three fallback strategies to extract station data from a parsed page:
+      1. HTML table rows
+      2. div/li card elements with common CSS selectors
+      3. JSON objects embedded in <script> tags
+
+    ``chain_override`` forces a specific chain name for every parsed station.
+    """
+    stations: list[dict] = []
+
+    # Strategy 1 – HTML tables
+    for table in soup.find_all("table"):
+        for row in table.find_all("tr"):
+            cells = row.find_all("td")
+            if len(cells) < 3:
+                continue
+            s = _parse_generic_row(cells, chain_override=chain_override)
+            if s:
+                stations.append(s)
+
+    # Strategy 2 – card / div elements
+    if not stations:
+        selectors = (
+            ".pump, .station, .cs-item, .stanice, .fuel-station, "
+            ".gas-station, .petrol-station, [class*='pump'], "
+            "[class*='station'], [class*='cs-'], [class*='stanice']"
+        )
+        for item in soup.select(selectors):
+            s = _parse_generic_card(item, chain_override=chain_override)
+            if s:
+                stations.append(s)
+
+    # Strategy 3 – JSON in <script> tags
+    if not stations:
+        for script in soup.find_all("script"):
+            text = script.string or ""
+            text_lower = text.lower()
+            if any(k in text_lower for k in ("benzin", "petrol", "nafta", "diesel")):
+                stations.extend(
+                    _extract_json_stations(text, chain_override=chain_override)
+                )
+
+    return stations
+
+
+def _parse_generic_row(cells, chain_override: str | None = None) -> dict | None:
+    """Parse a <tr> row from an arbitrary table, reusing the mbenzin logic."""
+    texts = [c.get_text(strip=True) for c in cells]
+    prices = [parse_price(t) for t in texts]
+    valid = [(i, p) for i, p in enumerate(prices) if p is not None]
+    if not valid:
+        return None
+
+    name = city = ""
+    for t in texts:
+        if t and parse_price(t) is None and len(t) > 2 and not t.isdigit():
+            if not name:
+                name = t
+            elif not city:
+                city = t
+                break
+    if not name:
+        return None
+
+    p95  = valid[0][1] if len(valid) > 0 else 0.0
+    dies = valid[1][1] if len(valid) > 1 else 0.0
+    _, region = city_and_region(city or name)
+    return {
+        "name":         name,
+        "chain":        chain_override or infer_chain(name),
+        "city":         city,
+        "region":       region,
+        "address":      "",
+        "petrol_95":    p95,
+        "diesel":       dies,
+        "last_updated": datetime.date.today().isoformat(),
+    }
+
+
+def _parse_generic_card(element, chain_override: str | None = None) -> dict | None:
+    """Parse a card/div element, reusing the mbenzin card logic."""
+    full_text = element.get_text(separator=" ", strip=True)
+    price_matches = re.findall(r"\b(\d{2}[,.]\d{1,2})\b", full_text)
+    prices = [parse_price(p) for p in price_matches]
+    prices = [p for p in prices if p is not None]
+    if not prices:
+        return None
+
+    name_el = element.select_one(".name, .title, h3, h4, strong, b")
+    name = name_el.get_text(strip=True) if name_el else ""
+    if not name:
+        return None
+
+    city_el = element.select_one(".city, .mesto, .location, .town")
+    city = city_el.get_text(strip=True) if city_el else ""
+    _, region = city_and_region(city or name)
+    return {
+        "name":         name,
+        "chain":        chain_override or infer_chain(name),
+        "city":         city,
+        "region":       region,
+        "address":      "",
+        "petrol_95":    prices[0] if len(prices) > 0 else 0.0,
+        "diesel":       prices[1] if len(prices) > 1 else 0.0,
+        "last_updated": datetime.date.today().isoformat(),
+    }
+
+
 # ── shared helpers ────────────────────────────────────────────────────────────
 
 def infer_chain(name: str) -> str:
@@ -424,10 +739,10 @@ def infer_chain(name: str) -> str:
         ("tank ono", "Tank ONO"), ("ono",     "Tank ONO"),
         ("shell",    "Shell"),    ("omv",     "OMV"),
         (" mol",     "MOL"),      ("mol ",    "MOL"),
-        ("benzina",  "Benzina"),  ("orlen",   "Benzina"),
+        ("orlen",    "Orlen"),    ("benzina",  "Benzina"),
         ("eurooil",  "EuroOil"),  ("euro oil","EuroOil"),
         ("globus",   "Globus"),   ("čepro",   "ČEPRO"),
-        ("cepro",    "ČEPRO"),
+        ("cepro",    "ČEPRO"),    ("ccs",     "CCS"),
     ]:
         if kw in n:
             return chain
@@ -471,8 +786,18 @@ def main() -> None:
     all_stations.extend(scrape_tank_ono())
     time.sleep(1)
 
-    # Secondary source
-    all_stations.extend(scrape_mbenzin())
+    # Secondary sources – each separated by a short delay to be polite
+    secondary_scrapers = (
+        scrape_mbenzin,
+        scrape_ccs,
+        scrape_orlen,
+        scrape_omv,
+        scrape_fuelto,
+        scrape_ipumpuj,
+    )
+    for scrape_fn in secondary_scrapers:
+        all_stations.extend(scrape_fn())
+        time.sleep(1)
 
     if not all_stations:
         print(
@@ -485,9 +810,25 @@ def main() -> None:
     all_stations = deduplicate(all_stations)
     all_stations = add_ids(all_stations)
 
+    # Derive source label from primary URL lists of all scrapers
+    source_domains = [
+        "tank-ono.cz",
+        *[
+            re.sub(r"https?://(www\.)?", "", urls[0]).split("/")[0]
+            for fn, urls in (
+                (scrape_mbenzin, _MBENZIN_URLS),
+                (scrape_ccs,     _CCS_URLS),
+                (scrape_orlen,   _ORLEN_URLS),
+                (scrape_omv,     _OMV_URLS),
+                (scrape_fuelto,  _FUELTO_URLS),
+                (scrape_ipumpuj, _IPUMPUJ_URLS),
+            )
+        ],
+    ]
+
     output = {
         "last_updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "source": "tank-ono.cz + mbenzin.cz",
+        "source": " + ".join(source_domains),
         "averages": compute_averages(all_stations),
         "stations": all_stations,
     }
