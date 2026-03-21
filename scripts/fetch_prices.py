@@ -437,8 +437,11 @@ def infer_chain(name: str) -> str:
 def compute_averages(stations: list[dict]) -> dict:
     p95  = [s["petrol_95"] for s in stations if s["petrol_95"] > 0]
     dies = [s["diesel"]    for s in stations if s["diesel"]    > 0]
-    avg  = lambda lst: round(sum(lst) / len(lst), 2) if lst else 0.0
-    return {"petrol_95": avg(p95), "diesel": avg(dies)}
+
+    def safe_avg(lst: list[float]) -> float:
+        return round(sum(lst) / len(lst), 2) if lst else 0.0
+
+    return {"petrol_95": safe_avg(p95), "diesel": safe_avg(dies)}
 
 
 def deduplicate(stations: list[dict]) -> list[dict]:
@@ -483,7 +486,7 @@ def main() -> None:
     all_stations = add_ids(all_stations)
 
     output = {
-        "last_updated": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "last_updated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "source": "tank-ono.cz + mbenzin.cz",
         "averages": compute_averages(all_stations),
         "stations": all_stations,
