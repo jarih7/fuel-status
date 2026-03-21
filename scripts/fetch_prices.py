@@ -2,8 +2,8 @@
 """
 fetch_prices.py – Scrape Czech fuel station prices from:
   1. tank-ono.cz  (primary)  – all ~45 Tank ONO stations.
-                               URL: https://www.tank-ono.cz/cz/index.php?page=cenik
-                               Single-page CZK price table; confirmed working structure.
+                               URL: https://tank-ono.cz/cz/index.php?page=cenik
+                               Single-page CZK price table; column layout detected from headers.
   2. mbenzin.cz   (secondary) – price aggregator; flexible multi-strategy parsing.
   3. ccs.cz       – CCS fleet-card network; flexible multi-strategy parsing.
   4. orlen.cz     – Orlen Czech Republic stations; flexible multi-strategy parsing.
@@ -178,9 +178,10 @@ def parse_price(raw: str) -> float | None:
 
 # ── tank-ono.cz ──────────────────────────────────────────────────────────────
 
-TANK_ONO_URL = "https://www.tank-ono.cz/cz/index.php?page=cenik"
+TANK_ONO_URL = "https://tank-ono.cz/cz/index.php?page=cenik"
 
-# Column indices inside each <tr> (0-based):
+# Default column indices inside each <tr> (0-based), used when no header row is
+# found.  The actual indices are detected dynamically from the table headers.
 #   cells[0] = station name
 #   cells[1] = NM 95          ← petrol 95
 #   cells[2] = NM 95 Premium
@@ -189,8 +190,42 @@ TANK_ONO_URL = "https://www.tank-ono.cz/cz/index.php?page=cenik"
 #   cells[5] = ON Premium
 #   cells[6] = AdBlue
 #   cells[7] = LPG
-_ONO_NM95_IDX   = 1
-_ONO_DIESEL_IDX = 4
+_ONO_NM95_IDX_DEFAULT   = 1
+_ONO_DIESEL_IDX_DEFAULT = 4
+
+
+def _detect_ono_column_indices(rows) -> tuple[int, int]:
+    """
+    Scan the first header-like row to find the NM 95 and ON (diesel) columns.
+    Returns (nm95_idx, diesel_idx).  Falls back to hardcoded defaults when no
+    recognisable header is found.
+    """
+    for row in rows:
+        cells = row.find_all(["th", "td"])
+        texts = [c.get_text(strip=True).lower() for c in cells]
+        # A header row will contain fuel-type keywords
+        if not any(
+            re.search(r"nm\s*9\d|natural|(?:^|\s)on(?:\s|$)|diesel|nafta", t)
+            for t in texts
+        ):
+            continue
+
+        nm95_idx   = _ONO_NM95_IDX_DEFAULT
+        diesel_idx = _ONO_DIESEL_IDX_DEFAULT
+
+        for i, t in enumerate(texts):
+            # NM 95 column – not Premium, not 98
+            if re.search(r"nm\s*95", t) and not re.search(r"premium|98", t):
+                nm95_idx = i
+            # ON (diesel) column – not Premium, not AdBlue, not LPG
+            if re.search(r"(?:^|\s)on(?:\s|$)|diesel|nafta", t) and not re.search(
+                r"premium|adblue|lpg", t
+            ):
+                diesel_idx = i
+
+        return nm95_idx, diesel_idx
+
+    return _ONO_NM95_IDX_DEFAULT, _ONO_DIESEL_IDX_DEFAULT
 
 
 def scrape_tank_ono() -> list[dict]:
@@ -223,9 +258,11 @@ def scrape_tank_ono() -> list[dict]:
         if len(rows) < 3:
             continue
 
+        nm95_idx, diesel_idx = _detect_ono_column_indices(rows)
+
         for row in rows:
             cells = row.find_all("td")
-            if len(cells) <= _ONO_DIESEL_IDX:
+            if len(cells) <= diesel_idx:
                 continue
 
             station_name = cells[0].get_text(strip=True)
@@ -235,8 +272,8 @@ def scrape_tank_ono() -> list[dict]:
             ):
                 continue
 
-            nm95   = parse_price(cells[_ONO_NM95_IDX].get_text(strip=True))
-            diesel = parse_price(cells[_ONO_DIESEL_IDX].get_text(strip=True))
+            nm95   = parse_price(cells[nm95_idx].get_text(strip=True))
+            diesel = parse_price(cells[diesel_idx].get_text(strip=True))
 
             if nm95 is None and diesel is None:
                 continue
