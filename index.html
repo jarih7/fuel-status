@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ceny paliv v ČR – Czech Fuel Prices</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <style>
     /* ─── CSS reset & variables ─── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -293,10 +294,96 @@
       margin-bottom: .5rem;
     }
 
+    /* ─── View toggle ─── */
+    .view-toggle {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1rem;
+    }
+
+    .view-toggle button {
+      padding: .45rem 1.2rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      background: var(--bg);
+      color: var(--text);
+      font-size: .9rem;
+      font-weight: 600;
+      transition: all .15s;
+    }
+
+    .view-toggle button.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+
+    .view-toggle button:hover:not(.active) {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    /* ─── Map ─── */
+    #mapContainer {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    #map {
+      height: 520px;
+      width: 100%;
+    }
+
+    .map-popup-content {
+      min-width: 180px;
+    }
+
+    .map-popup-name {
+      font-weight: 700;
+      font-size: .95rem;
+      margin-bottom: .25rem;
+    }
+
+    .map-popup-subtitle {
+      font-size: .82rem;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+
+    .map-popup-city {
+      font-size: .82rem;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+
+    .map-popup-prices {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+
+    .map-popup-price {
+      font-weight: 700;
+      font-size: .85rem;
+      padding: .15rem .5rem;
+      border-radius: 4px;
+    }
+
+    .map-no-coords {
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
     /* ─── Responsive ─── */
     @media (max-width: 700px) {
       td.station-address { display: none; }
       thead th:nth-child(3) { display: none; }
+      #map { height: 380px; }
     }
   </style>
 </head>
@@ -337,6 +424,12 @@
     </div>
   </div>
 
+  <!-- View toggle -->
+  <div class="view-toggle" role="group" aria-label="Přepnout zobrazení">
+    <button id="btnTableView" class="active" aria-pressed="true">📋 Tabulka</button>
+    <button id="btnMapView" aria-pressed="false">🗺️ Mapa</button>
+  </div>
+
   <!-- Toolbar -->
   <div class="toolbar">
     <input type="search" id="searchInput" placeholder="🔍  Hledat stanici, město…" aria-label="Hledat" />
@@ -364,7 +457,7 @@
   <p class="updated-notice" id="updatedNotice"></p>
 
   <!-- Table -->
-  <div class="table-wrapper">
+  <div class="table-wrapper" id="tableContainer">
     <table id="pricesTable" aria-label="Ceny paliv na českých benzinových stanicích">
       <thead>
         <tr>
@@ -381,6 +474,11 @@
     </table>
   </div>
 
+  <!-- Map -->
+  <div id="mapContainer" style="display:none;">
+    <div id="map"></div>
+  </div>
+
 </main>
 
 <footer>
@@ -389,6 +487,7 @@
   Automaticky aktualizováno každých 24 hodin.
 </footer>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WPcM=" crossorigin=""></script>
 <script>
 (function () {
   "use strict";
@@ -396,6 +495,315 @@
   let allStations = [];
   let sortCol = "petrol_95";
   let sortDir = "asc";
+  let currentView = "table";
+  let mapInstance = null;
+  let mapMarkers = [];
+
+  /* ── Map configuration ── */
+  const CZECH_CENTER = [49.8, 15.5];
+  const DEFAULT_ZOOM = 7;
+  /* Maximum jitter (in degrees) applied to overlapping markers in the same city */
+  const JITTER_DEG = 0.018;
+
+  /* ── Czech city coordinates lookup ── */
+  const CITY_COORDS = {
+    // Praha & districts
+    "Praha": [50.0755, 14.4378],
+    "Zličín": [50.0575, 14.2833],
+    "Letňany": [50.1333, 14.5167],
+    "Čakovice": [50.1500, 14.5000],
+    "Holešovice": [50.1000, 14.4500],
+    "Kobylisy": [50.1333, 14.4333],
+    "Štěrboholy": [50.0514, 14.5289],
+    "Pankrác": [50.0600, 14.4333],
+    "Smíchov": [50.0700, 14.4033],
+    "Dolní Měcholupy": [50.0431, 14.5514],
+    // Středočeský
+    "Mladá Boleslav": [50.4153, 14.9103],
+    "Kladno": [50.1478, 14.1030],
+    "Říčany": [49.9922, 14.6539],
+    "Beroun": [49.9605, 14.0722],
+    "Příbram": [49.6908, 14.0086],
+    "Kutná Hora": [49.9483, 15.2681],
+    "Kolín": [50.0262, 15.2000],
+    "Nymburk": [50.1858, 15.0431],
+    "Mělník": [50.3512, 14.4735],
+    "Rakovník": [50.1040, 13.7341],
+    "Benešov": [49.7838, 14.6858],
+    "Kojetice": [50.2044, 14.5153],
+    "Milovice": [50.2197, 14.8798],
+    "Poděbrady": [50.1424, 15.1196],
+    "Kbelnice": [50.3667, 15.2000],
+    // Jihočeský
+    "České Budějovice": [48.9745, 14.4741],
+    "Písek": [49.3090, 14.1463],
+    "Tábor": [49.4151, 14.6609],
+    "Strakonice": [49.2610, 13.9028],
+    "Český Krumlov": [48.8128, 14.3147],
+    "Jindřichův Hradec": [49.1439, 15.0028],
+    "Planá nad Lužnicí": [49.3598, 14.7254],
+    "Dolní Dvořiště": [48.6459, 14.4682],
+    "Podolí u Písku": [49.3020, 14.1800],
+    // Plzeňský
+    "Plzeň": [49.7384, 13.3736],
+    "Klatovy": [49.3951, 13.2951],
+    "Rokycany": [49.7430, 13.5952],
+    "Nýřany": [49.7162, 13.2162],
+    "Domažlice": [49.4397, 12.9294],
+    "Přeštice": [49.5726, 13.3348],
+    // Karlovarský
+    "Sokolov": [50.1793, 12.6407],
+    "Cheb": [50.0653, 12.3684],
+    "Karlovy Vary": [50.2327, 12.8714],
+    "Ostrov nad Ohří": [50.3009, 12.9454],
+    "Vojtanov": [50.1636, 12.4143],
+    // Ústecký
+    "Teplice": [50.6413, 13.8241],
+    "Chomutov": [50.4598, 13.4180],
+    "Most": [50.5032, 13.6366],
+    "Děčín": [50.7741, 14.2148],
+    "Litoměřice": [50.5330, 14.1291],
+    "Ústí nad Labem": [50.6607, 14.0323],
+    "Ústí n. L.": [50.6607, 14.0323],
+    "Roudnice nad Labem": [50.4241, 14.2623],
+    "Havraň": [50.4817, 13.5839],
+    "Rumburk": [50.9542, 14.5511],
+    "Březno": [50.4700, 13.6200],
+    // Liberecký
+    "Liberec": [50.7663, 15.0543],
+    "Jablonec nad Nisou": [50.7243, 15.1699],
+    "Česká Lípa": [50.6864, 14.5387],
+    "Cvikov": [50.7736, 14.6404],
+    // Královéhradecký
+    "Hradec Králové": [50.2092, 15.8328],
+    "Trutnov": [50.5612, 15.9138],
+    "Náchod": [50.4172, 16.1631],
+    "Vysokov": [50.4167, 16.1833],
+    // Pardubický
+    "Pardubice": [50.0343, 15.7812],
+    "Chrudim": [49.9509, 15.7956],
+    "Svitavy": [49.7551, 16.4682],
+    "Vysoké Mýto": [49.9553, 16.1640],
+    // Vysočina
+    "Jihlava": [49.3961, 15.5914],
+    "Třebíč": [49.2152, 15.8800],
+    "Žďár nad Sázavou": [49.5637, 15.9415],
+    "Havlíčkův Brod": [49.6076, 15.5793],
+    // Jihomoravský
+    "Brno": [49.1951, 16.6068],
+    "Znojmo": [48.8561, 16.0489],
+    "Hodonín": [48.8493, 17.1277],
+    "Uherské Hradiště": [49.0680, 17.4600],
+    "Vyškov": [49.2780, 17.0081],
+    "Blansko": [49.3637, 16.6440],
+    "Šlapanice": [49.1667, 16.7167],
+    "Pohořelice": [48.9867, 16.5200],
+    "Popovice": [49.1167, 16.6333],
+    // Olomoucký
+    "Olomouc": [49.5938, 17.2509],
+    "Přerov": [49.4554, 17.4514],
+    "Prostějov": [49.4727, 17.1124],
+    "Šumperk": [49.9652, 16.9718],
+    "Jeseník": [50.2309, 17.2034],
+    // Moravskoslezský
+    "Ostrava": [49.8209, 18.2625],
+    "Opava": [49.9387, 17.9039],
+    "Havířov": [49.7782, 18.4319],
+    "Nový Jičín": [49.5938, 18.0128],
+    "Třinec": [49.6769, 18.6769],
+    "Frýdek-Místek": [49.6838, 18.3536],
+    "Karviná": [49.8563, 18.5382],
+    "Hlučín": [49.8979, 18.1939],
+    "Bohumín": [49.9057, 18.3600],
+    "Orlová": [49.8436, 18.3447],
+    "Bruntál": [49.9882, 17.4638],
+    "Mošnov": [49.6939, 18.1127],
+    "Studénka": [49.7168, 18.0782],
+    "Frýdlant nad Ostravicí": [49.5938, 18.3544],
+    // Zlínský
+    "Zlín": [49.2267, 17.6710],
+    "Vsetín": [49.3391, 17.9965],
+    "Kroměříž": [49.2979, 17.3944],
+    "Spytihněv": [49.0789, 17.4869],
+    "Uherský Brod": [48.9970, 17.6504],
+  };
+
+  /* ── resolve city name to [lat, lng] ── */
+  function getStationCoords(station) {
+    if (!station.city) return null;
+
+    let cityName = station.city;
+    // Strip "ČS " prefix (abbreviation for čerpací stanice)
+    if (cityName.startsWith("ČS ")) {
+      cityName = cityName.slice(3);
+    }
+    // Take first part before comma or dash for compound names
+    if (cityName.includes(",")) {
+      cityName = cityName.split(",")[0].trim();
+    } else if (/ - /.test(cityName)) {
+      cityName = cityName.split(" - ")[0].trim();
+    }
+
+    // Exact match
+    if (CITY_COORDS[cityName]) return CITY_COORDS[cityName];
+
+    // Partial / substring match against known cities
+    const lower = cityName.toLowerCase();
+    for (const [known, coords] of Object.entries(CITY_COORDS)) {
+      if (lower.startsWith(known.toLowerCase()) || known.toLowerCase().startsWith(lower)) {
+        return coords;
+      }
+    }
+
+    return null;
+  }
+
+  /* ── switch view ── */
+  function switchView(view) {
+    currentView = view;
+    const tableEl = document.getElementById("tableContainer");
+    const mapEl   = document.getElementById("mapContainer");
+    const btnTable = document.getElementById("btnTableView");
+    const btnMap   = document.getElementById("btnMapView");
+
+    if (view === "map") {
+      tableEl.style.display = "none";
+      mapEl.style.display   = "block";
+      btnTable.classList.remove("active");
+      btnTable.setAttribute("aria-pressed", "false");
+      btnMap.classList.add("active");
+      btnMap.setAttribute("aria-pressed", "true");
+      initMap();
+      renderMap(lastFiltered);
+    } else {
+      tableEl.style.display = "block";
+      mapEl.style.display   = "none";
+      btnTable.classList.add("active");
+      btnTable.setAttribute("aria-pressed", "true");
+      btnMap.classList.remove("active");
+      btnMap.setAttribute("aria-pressed", "false");
+    }
+  }
+
+  /* ── initialise Leaflet map (once) ── */
+  function initMap() {
+    if (mapInstance) {
+      setTimeout(() => mapInstance.invalidateSize(), 50);
+      return;
+    }
+    if (typeof L === "undefined") {
+      document.getElementById("map").innerHTML =
+        '<div class="map-no-coords">Mapa není dostupná – nepodařilo se načíst mapovou knihovnu. Zkontrolujte připojení k internetu a obnovte stránku.</div>';
+      return;
+    }
+    mapInstance = L.map("map", { scrollWheelZoom: false }).setView(CZECH_CENTER, DEFAULT_ZOOM);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 18,
+    }).addTo(mapInstance);
+    setTimeout(() => mapInstance.invalidateSize(), 50);
+  }
+
+  /* ── render map markers ── */
+  let lastFiltered = [];
+
+  function renderMap(stations) {
+    if (!mapInstance) return;
+
+    // Remove old markers
+    mapMarkers.forEach(m => m.remove());
+    mapMarkers = [];
+
+    const p95vals = allStations.map(s => s.petrol_95).filter(v => v > 0);
+    const p95min  = Math.min(...p95vals);
+    const p95max  = Math.max(...p95vals);
+    const dieVals = allStations.map(s => s.diesel).filter(v => v > 0);
+    const dmin    = Math.min(...dieVals);
+    const dmax    = Math.max(...dieVals);
+
+    const priceClass = (val, min, max) => {
+      /* || 1 prevents division by zero when all prices are identical */
+      const pct = (val - min) / (max - min || 1);
+      if (pct <= 0.33) return "price-low";
+      if (pct <= 0.66) return "price-mid";
+      return "price-high";
+    };
+
+    const tierColor = {
+      "price-low":  "#1A7F4B",
+      "price-mid":  "#D97706",
+      "price-high": "#D7141A",
+    };
+
+    const tierBg = {
+      "price-low":  "#D1FAE5",
+      "price-mid":  "#FEF3C7",
+      "price-high": "#FEE2E2",
+    };
+
+    let placed = 0;
+    stations.forEach(s => {
+      const coords = getStationCoords(s);
+      if (!coords) return;
+
+      // Small random jitter so overlapping stations in the same city remain visible
+      const jitter = () => (Math.random() - 0.5) * JITTER_DEG;
+      const pos = [coords[0] + jitter(), coords[1] + jitter()];
+
+      const cls   = priceClass(s.petrol_95, p95min, p95max);
+      const color = tierColor[cls];
+      const bg    = tierBg[cls];
+
+      const marker = L.circleMarker(pos, {
+        radius: 9,
+        fillColor: bg,
+        color: color,
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.92,
+      });
+
+      const chainLabel = s.chain === "Ostatní" ? s.name : s.chain;
+      const cityText   = s.city ? `<div class="map-popup-city">${escHtml(s.city)}</div>` : "";
+      const p95Cls     = priceClass(s.petrol_95, p95min, p95max);
+      const dCls       = priceClass(s.diesel, dmin, dmax);
+
+      const popup = `
+        <div class="map-popup-content">
+          <div class="map-popup-name">${escHtml(chainLabel)}</div>
+          <div class="map-popup-subtitle">${escHtml(s.name)}</div>
+          ${cityText}
+          <div class="map-popup-prices">
+            <span class="map-popup-price ${p95Cls}" style="background:${tierBg[p95Cls]};color:${tierColor[p95Cls]}">
+              N95: ${s.petrol_95.toFixed(2)} Kč/l
+            </span>
+            <span class="map-popup-price ${dCls}" style="background:${tierBg[dCls]};color:${tierColor[dCls]}">
+              Diesel: ${s.diesel.toFixed(2)} Kč/l
+            </span>
+          </div>
+        </div>`;
+
+      marker.bindPopup(popup);
+      marker.addTo(mapInstance);
+      mapMarkers.push(marker);
+      placed++;
+    });
+
+    // Show info when no stations in the current filter have known coordinates
+    if (placed === 0) {
+      const info = document.getElementById("mapNoCoords");
+      if (!info) {
+        const div = document.createElement("div");
+        div.id = "mapNoCoords";
+        div.className = "map-no-coords";
+        div.textContent = "Pro aktuální filtr nebyla nalezena žádná místa na mapě.";
+        document.getElementById("map").after(div);
+      }
+    } else {
+      const info = document.getElementById("mapNoCoords");
+      if (info) info.remove();
+    }
+  }
 
   /* ── fetch data ── */
   fetch("data/prices.json")
@@ -457,6 +865,9 @@
     syncHeaderSort();
     render();
   });
+
+  document.getElementById("btnTableView").addEventListener("click", () => switchView("table"));
+  document.getElementById("btnMapView").addEventListener("click",   () => switchView("map"));
 
   /* column header click → sort */
   document.querySelectorAll("thead th[data-col]").forEach(th => {
@@ -583,6 +994,10 @@
 
     /* update stats to reflect filtered set */
     updateStats(filtered.length ? filtered : allStations);
+
+    /* keep map in sync */
+    lastFiltered = filtered;
+    if (currentView === "map") renderMap(filtered);
   }
 
   /* ── helpers ── */
