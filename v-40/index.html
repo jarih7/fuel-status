@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volvo V40 – Technical Specifications | D4204T16 Engine</title>
+  <style>
+    /* ─── CSS reset & variables ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:   #11457E;
+      --red:    #D7141A;
+      --volvo-blue: #003057;
+      --volvo-light: #1F6FBF;
+      --white:  #FFFFFF;
+      --bg:     #F4F6FA;
+      --card:   #FFFFFF;
+      --border: #DDE3EE;
+      --text:   #1A2340;
+      --muted:  #6B7591;
+      --green:  #1A7F4B;
+      --orange: #D97706;
+      --shadow: 0 2px 10px rgba(17,69,126,.10);
+      --shadow-card: 0 4px 16px rgba(17,69,126,.12);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─── */
+    header {
+      background: linear-gradient(135deg, var(--volvo-blue) 0%, var(--volvo-light) 100%);
+      color: var(--white);
+      padding: 1.5rem 1rem 1.4rem;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,.25);
+      position: relative;
+    }
+
+    header::before {
+      content: "";
+      display: block;
+      height: 6px;
+      background: linear-gradient(90deg, var(--volvo-blue) 33.3%, var(--white) 33.3%, var(--white) 66.6%, #009FDB 66.6%);
+      position: absolute;
+      top: 0; left: 0; right: 0;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: .03em;
+      margin-top: .25rem;
+    }
+
+    header p.subtitle {
+      font-size: .95rem;
+      opacity: .85;
+      margin-top: .3rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      color: rgba(255,255,255,.85);
+      text-decoration: none;
+      font-size: .85rem;
+      margin-bottom: .8rem;
+      transition: color .15s;
+    }
+    .back-link:hover { color: #fff; }
+    .back-link svg { width: 14px; height: 14px; }
+
+    /* ─── Main layout ─── */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    /* ─── Section headers ─── */
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--volvo-blue);
+      margin-bottom: 1rem;
+      padding-bottom: .5rem;
+      border-bottom: 3px solid var(--volvo-blue);
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .section-title .icon { font-size: 1.4rem; }
+
+    /* ─── Cards ─── */
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow-card);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    /* ─── Hero overview grid ─── */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 700px) { .hero-grid { grid-template-columns: 1fr; } }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: .9rem;
+    }
+
+    .stat-pill {
+      background: linear-gradient(135deg, var(--volvo-blue) 0%, var(--volvo-light) 100%);
+      color: #fff;
+      border-radius: 10px;
+      padding: 1rem .9rem;
+      text-align: center;
+    }
+    .stat-pill .value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .stat-pill .label {
+      font-size: .72rem;
+      opacity: .85;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-top: .3rem;
+    }
+
+    /* ─── Tables ─── */
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .92rem;
+    }
+    .spec-table th, .spec-table td {
+      padding: .65rem .9rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+    .spec-table th {
+      background: var(--bg);
+      font-weight: 600;
+      color: var(--volvo-blue);
+      width: 45%;
+    }
+    .spec-table tr:last-child th,
+    .spec-table tr:last-child td { border-bottom: none; }
+    .spec-table tr:hover td, .spec-table tr:hover th { background: #EEF3FA; }
+
+    .table-section-header {
+      background: linear-gradient(90deg, var(--volvo-blue) 0%, var(--volvo-light) 100%) !important;
+      color: #fff !important;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      font-size: .8rem;
+    }
+    .table-section-header td {
+      color: #fff;
+      padding: .55rem .9rem;
+    }
+
+    /* ─── Badges ─── */
+    .badge {
+      display: inline-block;
+      padding: .2rem .55rem;
+      border-radius: 20px;
+      font-size: .75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .badge-green { background: #D1FAE5; color: #065f46; }
+    .badge-blue  { background: #DBEAFE; color: #1e40af; }
+    .badge-orange{ background: #FEF3C7; color: #92400e; }
+    .badge-red   { background: #FEE2E2; color: #991b1b; }
+
+    /* ─── Two-column layout ─── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 800px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ─── SVG charts ─── */
+    .chart-wrap {
+      overflow-x: auto;
+      border-radius: 8px;
+    }
+    .chart-title {
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: .75rem;
+    }
+
+    /* ─── Highlight box ─── */
+    .info-box {
+      border-left: 4px solid var(--volvo-blue);
+      background: #EEF3FA;
+      border-radius: 0 8px 8px 0;
+      padding: .9rem 1.1rem;
+      margin: 1rem 0;
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+    .info-box strong { color: var(--volvo-blue); }
+
+    /* ─── Emission diagram ─── */
+    .emission-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .8rem;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+    .flow-step {
+      background: var(--volvo-blue);
+      color: #fff;
+      border-radius: 8px;
+      padding: .6rem 1rem;
+      font-size: .82rem;
+      font-weight: 600;
+      text-align: center;
+      min-width: 110px;
+    }
+    .flow-arrow {
+      font-size: 1.4rem;
+      color: var(--volvo-blue);
+      font-weight: 700;
+    }
+
+    /* ─── Tags ─── */
+    .tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .7rem; }
+    .tag {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: .25rem .65rem;
+      font-size: .8rem;
+      color: var(--muted);
+    }
+
+    /* ─── Engine cutaway annotation (SVG) ─── */
+    .engine-svg-wrap {
+      text-align: center;
+      padding: .5rem 0;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 600px) {
+      .spec-table th, .spec-table td { padding: .5rem .6rem; font-size: .85rem; }
+      .card { padding: 1rem; }
+    }
+
+    /* ─── Turbo diagram colours ─── */
+    .turbo-fresh { fill: #DBEAFE; stroke: #1e40af; }
+    .turbo-compressed { fill: #D1FAE5; stroke: #065f46; }
+    .turbo-exhaust { fill: #FEE2E2; stroke: #991b1b; }
+    .turbo-neutral { fill: #F3F4F6; stroke: #6B7280; }
+    .turbo-oil { fill: #FEF3C7; stroke: #92400e; }
+
+    /* ─── Comparison table ─── */
+    .cmp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+    .cmp-table th {
+      background: var(--volvo-blue);
+      color: #fff;
+      padding: .6rem .8rem;
+      text-align: center;
+    }
+    .cmp-table th:first-child { text-align: left; }
+    .cmp-table td {
+      padding: .6rem .8rem;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .cmp-table td:first-child { text-align: left; font-weight: 600; }
+    .cmp-table tr:last-child td { border-bottom: none; }
+    .cmp-table .highlight-col { background: #EEF3FA; font-weight: 700; color: var(--volvo-blue); }
+    .cmp-table tr:hover td { background: #F9FAFB; }
+
+    /* ─── Piston diagram ─── */
+    .piston-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .piston-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .8rem 1rem;
+    }
+    .piston-item h4 {
+      font-size: .85rem;
+      color: var(--volvo-blue);
+      font-weight: 700;
+      margin-bottom: .4rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: .3rem;
+    }
+    .piston-item p {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="back-link" href="../">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
+      Back to Fuel Prices
+    </a>
+    <h1>Volvo V40 – Technical Specifications</h1>
+    <p class="subtitle">2012–2019 · Drive-E Engine Family · D4204T16 Deep Dive</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- ═══════════════════════════════ OVERVIEW ═══════════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">🚗</span> Vehicle Overview</h2>
+    <div class="hero-stats">
+      <div class="stat-pill">
+        <div class="value">190</div>
+        <div class="label">HP (D4)</div>
+      </div>
+      <div class="stat-pill">
+        <div class="value">400</div>
+        <div class="label">Nm Torque</div>
+      </div>
+      <div class="stat-pill">
+        <div class="value">2.0 L</div>
+        <div class="label">Displacement</div>
+      </div>
+      <div class="stat-pill">
+        <div class="value">7.9 s</div>
+        <div class="label">0–100 km/h</div>
+      </div>
+      <div class="stat-pill">
+        <div class="value">Euro 6</div>
+        <div class="label">Emission</div>
+      </div>
+      <div class="stat-pill">
+        <div class="value">4.3 L</div>
+        <div class="label">Fuel/100km</div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:1.2rem;">
+      The <strong>Volvo V40</strong> is a premium compact hatchback manufactured from <strong>2012 to 2019</strong>.
+      Built on the Ford C1 platform (shared with Focus, Mazda 3 gen. 2), the V40 brought Volvo's safety pedigree
+      to the C-segment. The top diesel variant, the <strong>D4</strong>, uses Volvo's own <strong>Drive-E D4204T16</strong>
+      2.0-litre four-cylinder engine – a modular, technically advanced unit combining a twin-scroll turbocharger,
+      2 000-bar piezo common-rail injection, and a full Euro 6 aftertreatment stack.
+    </div>
+
+    <table class="spec-table" style="margin-top:1rem;">
+      <tbody>
+        <tr><td class="table-section-header" colspan="2">General</td></tr>
+        <tr><th>Manufacturer</th><td>Volvo Cars (Gothenburg, Sweden)</td></tr>
+        <tr><th>Body style</th><td>5-door hatchback / compact wagon</td></tr>
+        <tr><th>Platform</th><td>Ford C1 (EUCD)</td></tr>
+        <tr><th>Production years</th><td>2012 – 2019</td></tr>
+        <tr><th>Assembly</th><td>Ghent, Belgium</td></tr>
+        <tr><th>Segment</th><td>C-segment premium hatchback</td></tr>
+        <tr><td class="table-section-header" colspan="2">Powertrain (D4 variant)</td></tr>
+        <tr><th>Engine code</th><td>D4204T16</td></tr>
+        <tr><th>Engine family</th><td>Volvo Drive-E (2.0 Diesel)</td></tr>
+        <tr><th>Transmission</th><td>6-speed automatic (Aisin TF-80SC) or 6-speed manual (Getrag M66)</td></tr>
+        <tr><th>Drive</th><td>Front-wheel drive (FWD)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════════════════ ENGINE ════════════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">⚙️</span> Engine – D4204T16 (Drive-E 2.0D)</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Core Architecture</td></tr>
+            <tr><th>Configuration</th><td>Inline 4-cylinder (I4)</td></tr>
+            <tr><th>Displacement</th><td>1 969 cm³ (1.97 L)</td></tr>
+            <tr><th>Bore × Stroke</th><td>82.0 mm × 93.2 mm</td></tr>
+            <tr><th>Compression ratio</th><td>15.8 : 1</td></tr>
+            <tr><th>Valvetrain</th><td>DOHC, 4 valves/cylinder (16v total)</td></tr>
+            <tr><th>Block material</th><td>Grey cast iron (GJL-250)</td></tr>
+            <tr><th>Head material</th><td>Aluminium alloy (AlSi9Cu3)</td></tr>
+            <tr><th>Crankshaft</th><td>Forged steel, 5-bearing, fully balanced</td></tr>
+            <tr><th>Timing drive</th><td>Wet timing belt + silent chain (secondary)</td></tr>
+            <tr><td class="table-section-header" colspan="2">Output</td></tr>
+            <tr><th>Max power (D4)</th><td>140 kW / 190 hp @ 4 000–4 250 rpm</td></tr>
+            <tr><th>Max torque (D4)</th><td>400 Nm @ 1 750–2 500 rpm</td></tr>
+            <tr><th>Power density</th><td>71 kW/L</td></tr>
+            <tr><th>Specific torque</th><td>203 Nm/L</td></tr>
+            <tr><td class="table-section-header" colspan="2">Lubrication &amp; Cooling</td></tr>
+            <tr><th>Oil capacity</th><td>5.0 L (with filter change)</td></tr>
+            <tr><th>Oil specification</th><td>Volvo VCC-RBS2AE (5W-30 LL)</td></tr>
+            <tr><th>Cooling</th><td>Liquid-cooled, thermostat 85 °C / 105 °C (max)</td></tr>
+            <tr><th>Oil pressure (idle)</th><td>≥ 1.5 bar</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <!-- SVG Performance Curves -->
+        <div class="chart-title">Power &amp; Torque Curves – D4204T16</div>
+        <div class="chart-wrap">
+          <svg viewBox="0 0 440 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:440px;background:#fff;border-radius:8px;border:1px solid var(--border);">
+            <!-- Grid lines -->
+            <defs>
+              <pattern id="grid" width="44" height="28" patternUnits="userSpaceOnUse">
+                <path d="M 44 0 L 0 0 0 28" fill="none" stroke="#EEF3FA" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <rect x="50" y="15" width="370" height="220" fill="url(#grid)"/>
+
+            <!-- Axes -->
+            <line x1="50" y1="235" x2="420" y2="235" stroke="#aaa" stroke-width="1.5"/>
+            <line x1="50" y1="15"  x2="50"  y2="235" stroke="#aaa" stroke-width="1.5"/>
+
+            <!-- Y-axis (left) – Power [kW] 0-160 -->
+            <text x="46" y="238" text-anchor="end" font-size="10" fill="#6B7591">0</text>
+            <text x="46" y="210" text-anchor="end" font-size="10" fill="#6B7591">20</text>
+            <text x="46" y="182" text-anchor="end" font-size="10" fill="#6B7591">40</text>
+            <text x="46" y="155" text-anchor="end" font-size="10" fill="#6B7591">60</text>
+            <text x="46" y="127" text-anchor="end" font-size="10" fill="#6B7591">80</text>
+            <text x="46" y="99"  text-anchor="end" font-size="10" fill="#6B7591">100</text>
+            <text x="46" y="71"  text-anchor="end" font-size="10" fill="#6B7591">120</text>
+            <text x="46" y="43"  text-anchor="end" font-size="10" fill="#6B7591">140</text>
+            <text transform="rotate(-90,14,130)" x="14" y="130" text-anchor="middle" font-size="11" fill="#1F6FBF" font-weight="600">Power (kW)</text>
+
+            <!-- Y-axis (right) – Torque [Nm] 0-450 -->
+            <line x1="420" y1="15" x2="420" y2="235" stroke="#aaa" stroke-width="1.5"/>
+            <text x="424" y="238" text-anchor="start" font-size="10" fill="#6B7591">0</text>
+            <text x="424" y="185" text-anchor="start" font-size="10" fill="#6B7591">100</text>
+            <text x="424" y="135" text-anchor="start" font-size="10" fill="#6B7591">200</text>
+            <text x="424" y="84"  text-anchor="start" font-size="10" fill="#6B7591">300</text>
+            <text x="424" y="34"  text-anchor="start" font-size="10" fill="#6B7591">400</text>
+            <text transform="rotate(90,440,130)" x="440" y="130" text-anchor="middle" font-size="11" fill="#D97706" font-weight="600">Torque (Nm)</text>
+
+            <!-- X-axis ticks (rpm) -->
+            <!-- Scale: x = 50 + (rpm-500)/100 * (370/37) ≈ x=50 + (rpm-500)*0.1 (500..4500 → 0..400px) -->
+            <text x="50"  y="248" text-anchor="middle" font-size="10" fill="#6B7591">500</text>
+            <text x="124" y="248" text-anchor="middle" font-size="10" fill="#6B7591">1250</text>
+            <text x="198" y="248" text-anchor="middle" font-size="10" fill="#6B7591">2000</text>
+            <text x="272" y="248" text-anchor="middle" font-size="10" fill="#6B7591">2750</text>
+            <text x="346" y="248" text-anchor="middle" font-size="10" fill="#6B7591">3500</text>
+            <text x="420" y="248" text-anchor="middle" font-size="10" fill="#6B7591">4500</text>
+            <text x="235" y="262" text-anchor="middle" font-size="11" fill="#6B7591" font-weight="600">Engine speed (rpm)</text>
+
+            <!-- 
+              Power scale: 160 kW = full 220px height → 1 kW = 1.375 px
+              Torque scale: 450 Nm = full 220px height → 1 Nm = 0.489 px
+              rpm → x: x = 50 + (rpm – 500) * 400/4000 = 50 + (rpm-500)*0.1
+              Power → y: y = 235 – kW*1.375
+              Torque → y: y = 235 – Nm*0.489
+            -->
+
+            <!-- Torque curve (orange) — approximate D4204T16 characteristic -->
+            <polyline fill="none" stroke="#D97706" stroke-width="2.5" stroke-linejoin="round"
+              points="
+                50,220
+                80,160
+                124,93
+                160,81
+                198,79
+                272,79
+                320,83
+                346,92
+                380,115
+                420,143
+              "/>
+
+            <!-- Power curve (blue) — approximate D4204T16 characteristic -->
+            <polyline fill="none" stroke="#1F6FBF" stroke-width="2.5" stroke-linejoin="round"
+              points="
+                50,235
+                80,220
+                124,175
+                160,148
+                198,110
+                272,79
+                320,73
+                346,96
+                380,131
+                420,162
+              "/>
+
+            <!-- Max power marker -->
+            <circle cx="320" cy="73" r="4" fill="#1F6FBF"/>
+            <text x="305" y="66" font-size="9" fill="#1F6FBF" font-weight="700">140 kW</text>
+
+            <!-- Max torque marker -->
+            <circle cx="198" cy="79" r="4" fill="#D97706"/>
+            <text x="158" y="74" font-size="9" fill="#D97706" font-weight="700">400 Nm</text>
+
+            <!-- Legend -->
+            <rect x="55" y="22" width="10" height="3" fill="#1F6FBF" rx="1"/>
+            <text x="70" y="26" font-size="10" fill="#1F6FBF">Power</text>
+            <rect x="115" y="22" width="10" height="3" fill="#D97706" rx="1"/>
+            <text x="130" y="26" font-size="10" fill="#D97706">Torque</text>
+          </svg>
+        </div>
+
+        <!-- Engine variant comparison -->
+        <div style="margin-top:1.2rem;">
+          <div class="chart-title">Drive-E Diesel Variants – Power &amp; Torque</div>
+          <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:400px;background:#fff;border-radius:8px;border:1px solid var(--border);">
+            <!-- Bars for 4 variants: D2(115hp), D3(150hp), D4(190hp), D4AWD(190hp) -->
+            <!-- Power bars -->
+            <text x="200" y="14" text-anchor="middle" font-size="11" fill="#003057" font-weight="700">Engine Variants – D4204T Family</text>
+
+            <!-- Y-axis labels -->
+            <text x="5" y="40"  font-size="9" fill="#6B7591">200</text>
+            <text x="5" y="75"  font-size="9" fill="#6B7591">150</text>
+            <text x="5" y="110" font-size="9" fill="#6B7591">100</text>
+            <text x="5" y="145" font-size="9" fill="#6B7591">50</text>
+            <text x="5" y="162" font-size="9" fill="#6B7591">0</text>
+
+            <!-- grid -->
+            <line x1="30" y1="36" x2="395" y2="36" stroke="#eee" stroke-width="1"/>
+            <line x1="30" y1="70" x2="395" y2="70" stroke="#eee" stroke-width="1"/>
+            <line x1="30" y1="105" x2="395" y2="105" stroke="#eee" stroke-width="1"/>
+            <line x1="30" y1="140" x2="395" y2="140" stroke="#eee" stroke-width="1"/>
+            <line x1="30" y1="162" x2="395" y2="162" stroke="#aaa" stroke-width="1.5"/>
+
+            <!-- D2 (115hp, 270Nm) -->
+            <!-- Power: 115/200*126 = 72.5px → bar height=72.5, y=162-72.5=89.5 -->
+            <!-- Torque: 270/500*126 = 68px → bar height=68, y=162-68=94 -->
+            <rect x="40"  y="89"  width="20" height="73" fill="#1F6FBF" opacity="0.85" rx="3"/>
+            <rect x="63"  y="94"  width="20" height="68" fill="#D97706" opacity="0.85" rx="3"/>
+            <text x="61" y="173" text-anchor="middle" font-size="9" fill="#003057" font-weight="600">D2</text>
+            <text x="61" y="182" text-anchor="middle" font-size="8" fill="#6B7591">115hp</text>
+
+            <!-- D3 (150hp, 320Nm) -->
+            <!-- Power: 150/200*126=94.5 → y=162-94.5=67.5 -->
+            <!-- Torque: 320/500*126=80.6 → y=162-80.6=81.4 -->
+            <rect x="125" y="68"  width="20" height="94" fill="#1F6FBF" opacity="0.85" rx="3"/>
+            <rect x="148" y="81"  width="20" height="81" fill="#D97706" opacity="0.85" rx="3"/>
+            <text x="146" y="173" text-anchor="middle" font-size="9" fill="#003057" font-weight="600">D3</text>
+            <text x="146" y="182" text-anchor="middle" font-size="8" fill="#6B7591">150hp</text>
+
+            <!-- D4 (190hp, 400Nm) — highlighted -->
+            <!-- Power: 190/200*126=119.7 → y=162-119.7=42.3 -->
+            <!-- Torque: 400/500*126=100.8 → y=162-100.8=61.2 -->
+            <rect x="210" y="42"  width="20" height="120" fill="#003057" rx="3"/>
+            <rect x="233" y="61"  width="20" height="101" fill="#B45309" rx="3"/>
+            <text x="231" y="173" text-anchor="middle" font-size="9" fill="#003057" font-weight="700">D4 ★</text>
+            <text x="231" y="182" text-anchor="middle" font-size="8" fill="#6B7591">190hp</text>
+
+            <!-- D5 (225hp, 470Nm) for ref -->
+            <!-- Power: 225/200*126=141.75 → cap to 126 → y=162-126=36 -->
+            <!-- Torque: 470/500*126=118.4 → y=162-118.4=43.6 -->
+            <rect x="295" y="36"  width="20" height="126" fill="#1F6FBF" opacity="0.55" rx="3"/>
+            <rect x="318" y="44"  width="20" height="118" fill="#D97706" opacity="0.55" rx="3"/>
+            <text x="316" y="173" text-anchor="middle" font-size="9" fill="#003057" font-weight="600">D5</text>
+            <text x="316" y="182" text-anchor="middle" font-size="8" fill="#6B7591">225hp</text>
+
+            <!-- Legend -->
+            <rect x="40" y="4" width="8" height="8" fill="#1F6FBF" rx="2"/>
+            <text x="52" y="12" font-size="9" fill="#1F6FBF">Power (hp)</text>
+            <rect x="120" y="4" width="8" height="8" fill="#D97706" rx="2"/>
+            <text x="132" y="12" font-size="9" fill="#D97706">Torque (Nm/2)</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ TURBOCHARGER ═══════════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">🌪️</span> Turbocharger System</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Turbo Specifications</td></tr>
+            <tr><th>Type</th><td>Single twin-scroll variable-geometry turbocharger (VGT)</td></tr>
+            <tr><th>Supplier</th><td>Garrett (Honeywell) GTB1756VK</td></tr>
+            <tr><th>Compressor wheel</th><td>Aluminium, 8+8 blade split design</td></tr>
+            <tr><th>Turbine wheel</th><td>Inconel 713 nickel superalloy</td></tr>
+            <tr><th>Variable geometry</th><td>Sliding nozzle vane (pneumatic actuator)</td></tr>
+            <tr><th>Max boost pressure</th><td>~2.2 bar (absolute) / ~1.2 bar above ambient</td></tr>
+            <tr><th>Intercooler</th><td>Air-to-air front-mounted (FMIC), aluminium bar-and-plate</td></tr>
+            <tr><th>Intercooler ΔT</th><td>Inlet ~120 °C → Outlet ≤ 45 °C at rated power</td></tr>
+            <tr><th>Turbo bearing</th><td>Full floating journal bearing + thrust bearing</td></tr>
+            <tr><th>Lubrication</th><td>Engine oil feed (pressure-fed, gravity drain)</td></tr>
+            <tr><th>Water cooling</th><td>Yes (separate coolant circuit for bearing housing)</td></tr>
+            <tr><th>Max turbine inlet temp</th><td>850 °C continuous / 900 °C peak</td></tr>
+            <tr><th>Boost control</th><td>ECU-controlled solenoid valve on actuator, closed-loop via MAP sensor</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <!-- Turbo flow diagram SVG -->
+        <div class="chart-title">Twin-Scroll Turbo Air &amp; Exhaust Flow</div>
+        <svg viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:360px;background:#fff;border-radius:8px;border:1px solid var(--border);">
+          <!-- Intake path (blue) -->
+          <!-- Air filter box -->
+          <rect x="10" y="20" width="70" height="36" rx="6" fill="#DBEAFE" stroke="#1e40af" stroke-width="1.5"/>
+          <text x="45" y="35" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="600">Air Filter</text>
+          <text x="45" y="47" text-anchor="middle" font-size="8" fill="#1e40af">MAF sensor</text>
+          <!-- Arrow to compressor -->
+          <line x1="80" y1="38" x2="115" y2="38" stroke="#1e40af" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+          <!-- Compressor housing -->
+          <ellipse cx="140" cy="95" rx="30" ry="45" fill="#BFDBFE" stroke="#1e40af" stroke-width="2"/>
+          <text x="140" y="91" text-anchor="middle" font-size="9" fill="#1e40af" font-weight="700">Compressor</text>
+          <text x="140" y="103" text-anchor="middle" font-size="8" fill="#1e40af">(Garrett GTB)</text>
+
+          <!-- Turbine housing -->
+          <ellipse cx="220" cy="95" rx="30" ry="45" fill="#FECACA" stroke="#991b1b" stroke-width="2"/>
+          <text x="220" y="91" text-anchor="middle" font-size="9" fill="#991b1b" font-weight="700">Turbine</text>
+          <text x="220" y="103" text-anchor="middle" font-size="8" fill="#991b1b">(VGT vanes)</text>
+
+          <!-- Shaft line -->
+          <line x1="170" y1="95" x2="190" y2="95" stroke="#6B7280" stroke-width="3" stroke-dasharray="4,2"/>
+          <text x="180" y="88" text-anchor="middle" font-size="8" fill="#6B7280">shaft</text>
+
+          <!-- Compressed air to intercooler -->
+          <line x1="140" y1="50" x2="140" y2="15" stroke="#1e40af" stroke-width="2"/>
+          <line x1="140" y1="15" x2="250" y2="15" stroke="#1e40af" stroke-width="2"/>
+          <line x1="250" y1="15" x2="250" y2="40" stroke="#1e40af" stroke-width="2" marker-end="url(#arrowBlue)"/>
+          <!-- Intercooler -->
+          <rect x="215" y="40" width="70" height="36" rx="6" fill="#D1FAE5" stroke="#065f46" stroke-width="1.5"/>
+          <text x="250" y="55" text-anchor="middle" font-size="9" fill="#065f46" font-weight="600">Intercooler</text>
+          <text x="250" y="67" text-anchor="middle" font-size="8" fill="#065f46">(FMIC, Al)</text>
+          <!-- Cooled air to intake manifold -->
+          <line x1="285" y1="58" x2="340" y2="58" stroke="#065f46" stroke-width="2" marker-end="url(#arrowGreen)"/>
+          <!-- Intake manifold -->
+          <rect x="295" y="40" width="55" height="36" rx="6" fill="#D1FAE5" stroke="#065f46" stroke-width="1.5"/>
+          <text x="322" y="55" text-anchor="middle" font-size="9" fill="#065f46" font-weight="600">Intake</text>
+          <text x="322" y="67" text-anchor="middle" font-size="8" fill="#065f46">Manifold</text>
+
+          <!-- Engine block -->
+          <rect x="120" y="165" width="120" height="55" rx="8" fill="#F3F4F6" stroke="#6B7280" stroke-width="2"/>
+          <text x="180" y="186" text-anchor="middle" font-size="10" fill="#374151" font-weight="700">Engine Block</text>
+          <text x="180" y="200" text-anchor="middle" font-size="8.5" fill="#6B7591">D4204T16 · 1969 cc</text>
+          <text x="180" y="212" text-anchor="middle" font-size="8.5" fill="#6B7591">82 × 93.2 mm · 15.8:1</text>
+
+          <!-- Intake to engine -->
+          <line x1="322" y1="76" x2="322" y2="165" stroke="#065f46" stroke-width="2" stroke-dasharray="3,2"/>
+          <line x1="322" y1="165" x2="240" y2="165" stroke="#065f46" stroke-width="2" marker-end="url(#arrowGreen)"/>
+
+          <!-- Air filter to engine intake (low-pressure) -->
+          <line x1="45" y1="56" x2="45" y2="165" stroke="#93C5FD" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <line x1="45" y1="165" x2="120" y2="165" stroke="#93C5FD" stroke-width="1.5"/>
+
+          <!-- Exhaust from engine to turbine -->
+          <line x1="240" y1="180" x2="295" y2="180" stroke="#991b1b" stroke-width="2" stroke-dasharray="3,2"/>
+          <line x1="295" y1="180" x2="295" y2="130" stroke="#991b1b" stroke-width="2" stroke-dasharray="3,2"/>
+          <line x1="295" y1="130" x2="250" y2="130" stroke="#991b1b" stroke-width="2" marker-end="url(#arrowRed)"/>
+          <!-- Exhaust out after turbine -->
+          <line x1="220" y1="140" x2="220" y2="230" stroke="#991b1b" stroke-width="2" marker-end="url(#arrowRed)"/>
+          <!-- DPF/SCR box -->
+          <rect x="185" y="230" width="70" height="35" rx="6" fill="#FEE2E2" stroke="#991b1b" stroke-width="1.5"/>
+          <text x="220" y="245" text-anchor="middle" font-size="9" fill="#991b1b" font-weight="600">DPF + SCR</text>
+          <text x="220" y="257" text-anchor="middle" font-size="8" fill="#991b1b">+ AdBlue</text>
+
+          <!-- Arrow markers -->
+          <defs>
+            <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#1e40af"/></marker>
+            <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#065f46"/></marker>
+            <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#991b1b"/></marker>
+          </defs>
+
+          <!-- Labels -->
+          <text x="180" y="295" text-anchor="middle" font-size="8" fill="#6B7591">Blue = fresh air · Green = compressed/cooled · Red = exhaust gas</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Twin-scroll design:</strong> The turbine housing is divided into two separate scroll passages, each fed by pairs of engine cylinders (1&amp;4 and 2&amp;3). This minimises pulse interference between cylinders, sustaining higher exhaust energy at low RPM and delivering boost earlier — contributing to the flat 400 Nm plateau from just 1 750 rpm.
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ FUEL INJECTION ═════════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">💉</span> Fuel Injection System</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Common-Rail Direct Injection</td></tr>
+            <tr><th>System type</th><td>Bosch CRS3 high-pressure common rail</td></tr>
+            <tr><th>Injection type</th><td>Direct injection (DI), solenoid-actuated piezo injectors</td></tr>
+            <tr><th>Injector type</th><td>Bosch 8-hole piezo solenoid (CRIP3)</td></tr>
+            <tr><th>Rail pressure (idle)</th><td>~300 bar</td></tr>
+            <tr><th>Rail pressure (max)</th><td>2 000 bar (2 × 10⁵ kPa)</td></tr>
+            <tr><th>High-pressure pump</th><td>Bosch CP4.2 (2-piston, cam-driven)</td></tr>
+            <tr><th>Fuel feed pump</th><td>Electric, in-tank (3.5 bar supply)</td></tr>
+            <tr><th>Injection events/cycle</th><td>Up to 5 (pilot × 2, main, post × 2)</td></tr>
+            <tr><th>Pilot injection</th><td>2× pilots reduce combustion noise; quantity ~1–3 mm³</td></tr>
+            <tr><th>Main injection</th><td>SOI ~5–10° BTDC at rated load</td></tr>
+            <tr><th>Post injection</th><td>Late post for DPF regeneration (unburnt HC)</td></tr>
+            <tr><th>Fuel filter</th><td>10-micron water-separating cartridge (service every 30 000 km)</td></tr>
+            <tr><th>Cetane requirement</th><td>≥ 51 (EN 590 B6/B7 compatible)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <!-- Injection pressure bar chart -->
+        <div class="chart-title">Injection Pressure vs. Load</div>
+        <svg viewBox="0 0 320 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;background:#fff;border-radius:8px;border:1px solid var(--border);">
+          <!-- Axes -->
+          <line x1="50" y1="170" x2="305" y2="170" stroke="#aaa" stroke-width="1.5"/>
+          <line x1="50" y1="20"  x2="50"  y2="170" stroke="#aaa" stroke-width="1.5"/>
+
+          <!-- Y labels (bar) 0-2200 -->
+          <text x="45" y="173" text-anchor="end" font-size="9" fill="#6B7591">0</text>
+          <text x="45" y="130" text-anchor="end" font-size="9" fill="#6B7591">500</text>
+          <text x="45" y="87"  text-anchor="end" font-size="9" fill="#6B7591">1000</text>
+          <text x="45" y="44"  text-anchor="end" font-size="9" fill="#6B7591">1500</text>
+          <text x="45" y="23"  text-anchor="end" font-size="9" fill="#6B7591">2000</text>
+
+          <!-- Grid -->
+          <line x1="50" y1="130" x2="305" y2="130" stroke="#eee" stroke-width="1"/>
+          <line x1="50" y1="87"  x2="305" y2="87"  stroke="#eee" stroke-width="1"/>
+          <line x1="50" y1="44"  x2="305" y2="44"  stroke="#eee" stroke-width="1"/>
+
+          <!-- Bars: Idle(300), Low(700), Part(1200), High(1600), Full(2000) -->
+          <!-- Scale: 2200 bar = 150px → 1 bar = 0.0682px -->
+          <!-- 300→20.5, 700→47.7, 1200→81.8, 1600→109.1, 2000→136.4 -->
+          <rect x="60"  y="149" width="35" height="21"  fill="#93C5FD" stroke="#1e40af" stroke-width="1" rx="3"/>
+          <rect x="110" y="122" width="35" height="48"  fill="#60A5FA" stroke="#1e40af" stroke-width="1" rx="3"/>
+          <rect x="160" y="87"  width="35" height="83"  fill="#3B82F6" stroke="#1e40af" stroke-width="1" rx="3"/>
+          <rect x="210" y="59"  width="35" height="111" fill="#1D4ED8" stroke="#1e3a8a" stroke-width="1" rx="3"/>
+          <rect x="260" y="34"  width="35" height="136" fill="#003057" stroke="#003057" stroke-width="1" rx="3"/>
+
+          <!-- Values -->
+          <text x="77"  y="146" text-anchor="middle" font-size="9" fill="#1e40af">300</text>
+          <text x="127" y="119" text-anchor="middle" font-size="9" fill="#1e40af">700</text>
+          <text x="177" y="84"  text-anchor="middle" font-size="9" fill="#1e40af">1200</text>
+          <text x="227" y="56"  text-anchor="middle" font-size="9" fill="#fff">1600</text>
+          <text x="277" y="31"  text-anchor="middle" font-size="9" fill="#fff">2000</text>
+
+          <!-- X labels -->
+          <text x="77"  y="183" text-anchor="middle" font-size="8.5" fill="#6B7591">Idle</text>
+          <text x="127" y="183" text-anchor="middle" font-size="8.5" fill="#6B7591">Low</text>
+          <text x="177" y="183" text-anchor="middle" font-size="8.5" fill="#6B7591">Part</text>
+          <text x="227" y="183" text-anchor="middle" font-size="8.5" fill="#6B7591">High</text>
+          <text x="277" y="183" text-anchor="middle" font-size="8.5" fill="#6B7591">Full</text>
+          <text x="177" y="198" text-anchor="middle" font-size="10" fill="#6B7591" font-weight="600">Engine Load</text>
+          <text x="5"  y="130" text-anchor="middle" font-size="9" fill="#1D4ED8" font-weight="600" transform="rotate(-90,5,100)">Pressure (bar)</text>
+        </svg>
+
+        <div class="info-box" style="margin-top:1rem;">
+          <strong>Piezo advantage:</strong> Piezo solenoids open/close in &lt; 0.1 ms (vs. 0.3 ms for electromagnetic injectors), enabling multiple precisely-timed micro-injections per cycle. This reduces combustion knock, lowers NOₓ by up to 20 % and cuts soot formation by pre-conditioning the combustion chamber.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ PISTONS & INTERNALS ════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">🔩</span> Pistons &amp; Internal Components</h2>
+
+    <div class="piston-grid">
+      <div class="piston-item">
+        <h4>Pistons</h4>
+        <p>Cast aluminium alloy (AlSi12CuNiMg), steel-strapped for thermal expansion control. Bowl-in-piston design (toroidal re-entrant combustion bowl) promotes swirl and rapid fuel-air mixing. Gudgeon-pin offset to the thrust side to reduce piston slap.</p>
+      </div>
+      <div class="piston-item">
+        <h4>Piston Rings (per piston)</h4>
+        <p><strong>1st compression ring:</strong> Rectangular, chrome-ceramic PVD coating, 1.5 mm.<br>
+        <strong>2nd compression ring:</strong> Taper-faced, phosphate finish, 1.75 mm.<br>
+        <strong>Oil scraper ring:</strong> Spring-loaded 3-piece steel, 2.0 mm. Total end gaps verified to 0.20–0.40 mm.</p>
+      </div>
+      <div class="piston-item">
+        <h4>Connecting Rods</h4>
+        <p>Fracture-split (cracked) forged steel (42CrMo4), H-beam cross-section. Length 156.5 mm (centre-to-centre). Big-end shell bearings: tri-metal (steel/aluminium/overlay). Torque to yield bolts, 30 Nm + 90°.</p>
+      </div>
+      <div class="piston-item">
+        <h4>Crankshaft &amp; Bearings</h4>
+        <p>Forged steel, 5 main journals, fully counter-weighted. Journal diameter 57.982–58.000 mm. Crankshaft end-float 0.07–0.30 mm. Main bearing clearance 0.020–0.064 mm. Thrust washers at rear main bearing.</p>
+      </div>
+      <div class="piston-item">
+        <h4>Cylinder Liner</h4>
+        <p>Integral cast-iron bore (no separate liners). Plateau honed to Ra 0.4–0.8 µm. Bore tolerance H7 (+0.000/+0.021 mm). Cylinders sealed with MLS (multi-layer steel) head gasket, 1.37 mm nominal compressed thickness.</p>
+      </div>
+      <div class="piston-item">
+        <h4>Cylinder Head &amp; Valves</h4>
+        <p>Aluminium alloy, cross-flow, 4 valves/cyl. Intake valve dia 30.6 mm; exhaust 27.0 mm. Hydraulic lash adjusters (no manual valve clearance). VVT (variable valve timing) on intake camshaft only, ± 40° authority, solenoid-actuated OCV.</p>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:1rem;">
+      <strong>Combustion bowl geometry:</strong> The toroidal re-entrant bowl creates a powerful squish zone at TDC, forcing the injected fuel spray along the bowl wall and inducing strong in-bowl swirl (swirl ratio ≈ 2.5). This maximises air-fuel mixing speed and enables high BMEP (≈ 20 bar) without excessive soot formation.
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ EMISSION SYSTEMS ════════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">🌿</span> Emission Control Systems (Euro 6)</h2>
+
+    <!-- Flow diagram -->
+    <div class="chart-title" style="margin-bottom:.5rem;">Exhaust Aftertreatment Flow – D4204T16 (Euro 6)</div>
+    <div class="emission-flow">
+      <div class="flow-step">Engine Cylinders<br><small style="font-weight:400;opacity:.8;">combustion</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#B45309;">EGR Valve<br><small style="font-weight:400;opacity:.8;">cooled low-pressure</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Turbine (VGT)<br><small style="font-weight:400;opacity:.8;">energy recovery</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#1A7F4B;">DOC<br><small style="font-weight:400;opacity:.8;">diesel oxidation cat.</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#6B21A8;">DPF<br><small style="font-weight:400;opacity:.8;">soot filter</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#0E7490;">AdBlue Mixer<br><small style="font-weight:400;opacity:.8;">urea injection</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#065f46;">SCR Catalyst<br><small style="font-weight:400;opacity:.8;">NOₓ reduction</small></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step" style="background:#374151;">Tailpipe<br><small style="font-weight:400;opacity:.8;">clean exhaust</small></div>
+    </div>
+
+    <div class="two-col" style="margin-top:1.5rem;">
+      <!-- EGR -->
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--volvo-blue);margin-bottom:.8rem;">EGR – Exhaust Gas Recirculation</h3>
+        <table class="spec-table">
+          <tbody>
+            <tr><th>EGR type</th><td>Cooled low-pressure EGR (LP-EGR)</td></tr>
+            <tr><th>EGR rate</th><td>Up to 40 % at part load</td></tr>
+            <tr><th>EGR cooler</th><td>Water-to-gas, brazed aluminium, ΔT ~120 °C</td></tr>
+            <tr><th>EGR valve</th><td>Pneumatically actuated butterfly, ECU-controlled</td></tr>
+            <tr><th>Purpose</th><td>Dilutes fresh charge → reduces peak combustion temp → lowers NOₓ formation by 30–50 %</td></tr>
+            <tr><th>LP-EGR advantage</th><td>Gas drawn from after DPF; cleaner than HP-EGR → longer EGR valve life, no carbon fouling of intake</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- DPF -->
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--volvo-blue);margin-bottom:.8rem;">DPF – Diesel Particulate Filter</h3>
+        <table class="spec-table">
+          <tbody>
+            <tr><th>Substrate</th><td>Cordierite wall-flow monolith (200 cpsi)</td></tr>
+            <tr><th>Wash coat</th><td>Platinum/palladium (Pt/Pd) catalytic coating</td></tr>
+            <tr><th>Filtration efficiency</th><td>&gt; 99 % of particles by number</td></tr>
+            <tr><th>Soot capacity</th><td>~8 g/L (before forced regeneration)</td></tr>
+            <tr><th>Passive regen temp</th><td>≥ 550 °C (continuous motorway driving)</td></tr>
+            <tr><th>Active regeneration</th><td>ECU triggers post-injection → raises exhaust temp to 600–650 °C; cycle every ~500–800 km depending on driving style</td></tr>
+            <tr><th>DPF sensor</th><td>Differential pressure sensor (Δp) monitors soot load; OBD trigger at 20 mbar</td></tr>
+            <tr><th>Ash service interval</th><td>~240 000 km (non-regenerable ash)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:1.5rem;">
+      <!-- SCR / AdBlue -->
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--volvo-blue);margin-bottom:.8rem;">SCR + AdBlue – Selective Catalytic Reduction</h3>
+        <table class="spec-table">
+          <tbody>
+            <tr><th>Catalyst type</th><td>Vanadium pentoxide (V₂O₅/TiO₂) wash coat on cordierite monolith</td></tr>
+            <tr><th>Reductant</th><td>AdBlue® (32.5 % urea / 67.5 % deionised water, ISO 22241)</td></tr>
+            <tr><th>AdBlue tank capacity</th><td>17.5 L (typical refill interval 8 000–12 000 km)</td></tr>
+            <tr><th>NOₓ reduction efficiency</th><td>&gt; 95 % at operating temperature (&gt; 200 °C)</td></tr>
+            <tr><th>Dosing pump</th><td>Continental ACM2.1, ~0.5 bar injection pressure</td></tr>
+            <tr><th>Mixer length</th><td>300 mm upstream of SCR to ensure full urea hydrolysis</td></tr>
+            <tr><th>Hydrolysis reaction</th><td>(NH₂)₂CO + H₂O → 2 NH₃ + CO₂</td></tr>
+            <tr><th>SCR reaction</th><td>4 NH₃ + 4 NO + O₂ → 4 N₂ + 6 H₂O</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- DOC -->
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;color:var(--volvo-blue);margin-bottom:.8rem;">DOC – Diesel Oxidation Catalyst</h3>
+        <table class="spec-table">
+          <tbody>
+            <tr><th>Substrate</th><td>Ceramic monolith, 400 cpsi</td></tr>
+            <tr><th>Precious metals</th><td>Platinum (Pt) + Palladium (Pd), ~50 g/ft³ loading</td></tr>
+            <tr><th>Light-off temperature</th><td>~180 °C (50 % CO conversion)</td></tr>
+            <tr><th>HC conversion</th><td>&gt; 95 % at temp &gt; 250 °C</td></tr>
+            <tr><th>CO conversion</th><td>&gt; 95 % at temp &gt; 200 °C</td></tr>
+            <tr><th>NO → NO₂</th><td>Converts NO to NO₂; aids passive DPF regeneration and SCR efficiency</td></tr>
+            <tr><th>DPF heating role</th><td>During active regen, DOC oxidises HC from post-injection → exotherm raises DPF inlet to 600 °C</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Emissions compliance table -->
+        <h3 style="font-size:1rem;font-weight:700;color:var(--volvo-blue);margin:1.2rem 0 .8rem;">Euro 6 Emissions Limits vs. Measured</h3>
+        <table class="spec-table">
+          <thead>
+            <tr>
+              <th>Pollutant</th>
+              <th>Euro 6 Limit</th>
+              <th>D4204T16</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>NOₓ</strong></td><td>80 mg/km</td><td>~65 mg/km</td></tr>
+            <tr><td><strong>PM mass</strong></td><td>4.5 mg/km</td><td>&lt; 2 mg/km</td></tr>
+            <tr><td><strong>PN</strong></td><td>6×10¹¹ /km</td><td>&lt; 4×10¹¹ /km</td></tr>
+            <tr><td><strong>HC</strong></td><td>0.17 g/km</td><td>&lt; 0.10 g/km</td></tr>
+            <tr><td><strong>CO</strong></td><td>0.50 g/km</td><td>~0.25 g/km</td></tr>
+            <tr><td><strong>CO₂ (WLTP)</strong></td><td>n/a</td><td>~124 g/km</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ DIMENSIONS ═════════════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">📐</span> Dimensions &amp; Weight</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Exterior Dimensions</td></tr>
+            <tr><th>Length</th><td>4 369 mm</td></tr>
+            <tr><th>Width (excl. mirrors)</th><td>1 782 mm</td></tr>
+            <tr><th>Height</th><td>1 475 mm</td></tr>
+            <tr><th>Wheelbase</th><td>2 647 mm</td></tr>
+            <tr><th>Front track</th><td>1 542 mm</td></tr>
+            <tr><th>Rear track</th><td>1 546 mm</td></tr>
+            <tr><th>Overhang front/rear</th><td>881 mm / 841 mm</td></tr>
+            <tr><td class="table-section-header" colspan="2">Capacities &amp; Weight</td></tr>
+            <tr><th>Kerb weight (D4 auto)</th><td>1 480 kg</td></tr>
+            <tr><th>Gross vehicle weight</th><td>1 930 kg</td></tr>
+            <tr><th>Payload</th><td>450 kg</td></tr>
+            <tr><th>Fuel tank</th><td>62 L</td></tr>
+            <tr><th>AdBlue tank</th><td>17.5 L</td></tr>
+            <tr><th>Boot volume</th><td>335 L (VDA, seats up)</td></tr>
+            <tr><th>Boot volume (seats down)</th><td>1 032 L (60/40 rear bench)</td></tr>
+            <tr><th>Roof load</th><td>80 kg (with roof rack)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <!-- Silhouette dimension diagram -->
+        <div class="chart-title">Exterior Dimensions (mm)</div>
+        <svg viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:380px;background:#fff;border-radius:8px;border:1px solid var(--border);">
+          <!-- Car silhouette (simplified V40 profile) -->
+          <!-- Body outline -->
+          <path d="
+            M 30,140
+            L 30,100
+            Q 55,60 110,52
+            Q 165,44 200,44
+            Q 240,44 270,50
+            Q 310,58 330,90
+            L 345,120
+            L 345,140
+            Z
+          " fill="#DBEAFE" stroke="#1e40af" stroke-width="2"/>
+
+          <!-- Roof -->
+          <path d="
+            M 100,90
+            Q 130,50 180,44
+            Q 230,38 270,48
+            Q 295,56 310,80
+          " fill="none" stroke="#1e40af" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+          <!-- Wheels -->
+          <circle cx="90"  cy="140" r="22" fill="#374151"/>
+          <circle cx="90"  cy="140" r="14" fill="#9CA3AF"/>
+          <circle cx="90"  cy="140" r="6"  fill="#374151"/>
+          <circle cx="285" cy="140" r="22" fill="#374151"/>
+          <circle cx="285" cy="140" r="14" fill="#9CA3AF"/>
+          <circle cx="285" cy="140" r="6"  fill="#374151"/>
+
+          <!-- Ground line -->
+          <line x1="20" y1="162" x2="360" y2="162" stroke="#aaa" stroke-width="1.5"/>
+
+          <!-- Overall length arrow (bottom) -->
+          <line x1="30"  y1="178" x2="345" y2="178" stroke="#003057" stroke-width="1.5" marker-start="url(#arrowBoth)" marker-end="url(#arrowBoth2)"/>
+          <text x="187" y="191" text-anchor="middle" font-size="10" fill="#003057" font-weight="700">4 369 mm</text>
+
+          <!-- Wheelbase arrow -->
+          <line x1="90"  y1="170" x2="285" y2="170" stroke="#B45309" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="187" y="168" text-anchor="middle" font-size="9" fill="#B45309">WB 2 647 mm</text>
+
+          <!-- Height arrow (right side) -->
+          <line x1="358" y1="44" x2="358" y2="162" stroke="#065f46" stroke-width="1.5"/>
+          <text x="375" y="107" text-anchor="middle" font-size="9" fill="#065f46" transform="rotate(90,375,107)">1 475 mm</text>
+
+          <!-- Markers -->
+          <defs>
+            <marker id="arrowBoth"  markerWidth="6" markerHeight="6" refX="0" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="#003057"/></marker>
+            <marker id="arrowBoth2" markerWidth="6" markerHeight="6" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#003057"/></marker>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ DRIVETRAIN & TRANSMISSION ══════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">⚡</span> Drivetrain &amp; Transmission</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Automatic (Aisin TF-80SC)</td></tr>
+            <tr><th>Type</th><td>6-speed torque-converter automatic</td></tr>
+            <tr><th>Torque capacity</th><td>460 Nm</td></tr>
+            <tr><th>Ratios (1–6)</th><td>4.148 / 2.370 / 1.556 / 1.155 / 0.859 / 0.686</td></tr>
+            <tr><th>Reverse ratio</th><td>3.394</td></tr>
+            <tr><th>Final drive ratio</th><td>3.727 (FWD D4 AT)</td></tr>
+            <tr><th>Fluid type</th><td>Aisin/Esso ATF3317 (lifetime fill)</td></tr>
+            <tr><th>Paddle shifters</th><td>Yes (Geartronic steering-column shift)</td></tr>
+            <tr><td class="table-section-header" colspan="2">Manual (Getrag M66)</td></tr>
+            <tr><th>Type</th><td>6-speed manual (cable-shift)</td></tr>
+            <tr><th>Ratios (1–6)</th><td>3.917 / 2.158 / 1.393 / 1.030 / 0.825 / 0.668</td></tr>
+            <tr><th>Reverse ratio</th><td>3.564</td></tr>
+            <tr><th>Final drive ratio</th><td>3.923 (D4 MT)</td></tr>
+            <tr><th>Oil capacity</th><td>1.8 L MTF-LT-5 (GL-4)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Front Axle &amp; Driveshafts</td></tr>
+            <tr><th>Differential</th><td>Open (standard) / Limited-slip not available FWD</td></tr>
+            <tr><th>Driveshaft type</th><td>Tripod inner joint, Rzeppa outer joint</td></tr>
+            <tr><th>Driveshaft equal-length</th><td>Yes (via intermediate shaft on passenger side)</td></tr>
+            <tr><th>Steering</th><td>Electric power-assisted (EPAS), rack-and-pinion</td></tr>
+            <tr><th>Steering ratio</th><td>14.5 : 1</td></tr>
+            <tr><th>Turning circle</th><td>10.9 m (kerb-to-kerb)</td></tr>
+            <tr><td class="table-section-header" colspan="2">Performance</td></tr>
+            <tr><th>0–100 km/h (D4 AT)</th><td>7.9 s (official) / 7.6 s (measured)</td></tr>
+            <tr><th>Top speed</th><td>225 km/h (electronically limited)</td></tr>
+            <tr><th>80–120 km/h in-gear</th><td>5.1 s (6th gear, AT)</td></tr>
+            <tr><th>Fuel economy WLTP</th><td>4.3 L/100 km (combined)</td></tr>
+            <tr><th>CO₂ WLTP</th><td>124 g/km</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ SUSPENSION & BRAKES ════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">🔧</span> Suspension, Steering &amp; Brakes</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Suspension</td></tr>
+            <tr><th>Front suspension</th><td>MacPherson strut, coil springs, telescopic dampers, anti-roll bar ∅23 mm</td></tr>
+            <tr><th>Rear suspension</th><td>Semi-independent twist beam (torsion beam), coil springs, telescopic dampers, anti-roll bar ∅20 mm</td></tr>
+            <tr><th>Subframe</th><td>Bolt-on aluminium front subframe with hydro mounts</td></tr>
+            <tr><th>Spring rate (front/rear)</th><td>~28 N/mm / ~22 N/mm</td></tr>
+            <tr><th>Dynamic Chassis Control</th><td>Available (continuous damping adjustment via DCC – monotube CDC dampers)</td></tr>
+            <tr><td class="table-section-header" colspan="2">Brakes</td></tr>
+            <tr><th>Front brakes</th><td>Ventilated disc, ∅308 mm × 25 mm, 4-piston Brembo calliper</td></tr>
+            <tr><th>Rear brakes</th><td>Solid disc, ∅302 mm × 11 mm, sliding 1-piston calliper</td></tr>
+            <tr><th>Parking brake</th><td>Electric park brake (EPB), integrated rear callipers</td></tr>
+            <tr><th>ABS / ESC</th><td>Bosch 9.0 ABS + ESC (full stability control)</td></tr>
+            <tr><th>Brake booster</th><td>Vacuum pump (engine-driven), 9" tandem booster</td></tr>
+            <tr><th>Brake fluid</th><td>DOT 4+ (change every 2 years)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Wheels &amp; Tyres</td></tr>
+            <tr><th>Standard wheel size</th><td>7.0J × 17" (alloy)</td></tr>
+            <tr><th>Available wheel sizes</th><td>17", 18", 19" alloy</td></tr>
+            <tr><th>Standard tyre size</th><td>215/50 R17</td></tr>
+            <tr><th>Optional tyre sizes</th><td>225/45 R17, 225/40 R18, 235/35 R19</td></tr>
+            <tr><th>TPMS</th><td>Indirect (wheel speed sensor-based)</td></tr>
+            <tr><th>Spare tyre</th><td>Space-saver 135/70 R18 (optional)</td></tr>
+            <tr><td class="table-section-header" colspan="2">ADAS &amp; Safety</td></tr>
+            <tr><th>City Safety</th><td>Autonomous Emergency Braking (AEB) – standard; auto brake at up to 50 km/h</td></tr>
+            <tr><th>Pedestrian detection</th><td>Camera + radar, active braking up to 70 km/h</td></tr>
+            <tr><th>Lane keeping aid</th><td>LDWS + LKA (optional)</td></tr>
+            <tr><th>Cross-traffic alert</th><td>RCTA (optional – rear cross-traffic)</td></tr>
+            <tr><th>Blind-spot monitoring</th><td>BLIS (optional)</td></tr>
+            <tr><th>Euro NCAP (2012)</th><td>★★★★★ (5-star, 97 % adult / 78 % child)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ ENGINE VARIANT COMPARISON ══════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">📊</span> Powertrain Variant Comparison</h2>
+
+    <div style="overflow-x:auto;">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th>Spec</th>
+            <th>D2 (D4204T9)</th>
+            <th>D3 (D4204T14)</th>
+            <th class="highlight-col">D4 (D4204T16) ★</th>
+            <th>T2 1.5 Petrol</th>
+            <th>T3 1.5 Petrol</th>
+            <th>T5 2.0 Petrol</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Engine</td><td>2.0D I4</td><td>2.0D I4</td><td class="highlight-col">2.0D I4</td><td>1.5T I3</td><td>1.5T I3</td><td>2.0T I4</td></tr>
+          <tr><td>Power (hp)</td><td>115</td><td>150</td><td class="highlight-col">190</td><td>122</td><td>152</td><td>254</td></tr>
+          <tr><td>Torque (Nm)</td><td>280</td><td>320</td><td class="highlight-col">400</td><td>220</td><td>250</td><td>350</td></tr>
+          <tr><td>0–100 km/h (s)</td><td>10.1</td><td>8.3</td><td class="highlight-col">7.9</td><td>9.8</td><td>8.0</td><td>6.4</td></tr>
+          <tr><td>Top speed (km/h)</td><td>205</td><td>220</td><td class="highlight-col">225</td><td>200</td><td>220</td><td>250</td></tr>
+          <tr><td>Fuel economy (L/100km)</td><td>3.7</td><td>3.9</td><td class="highlight-col">4.3</td><td>5.1</td><td>5.5</td><td>7.2</td></tr>
+          <tr><td>CO₂ (g/km)</td><td>99</td><td>104</td><td class="highlight-col">124</td><td>118</td><td>128</td><td>165</td></tr>
+          <tr><td>Emission standard</td><td>Euro 6</td><td>Euro 6</td><td class="highlight-col">Euro 6</td><td>Euro 6</td><td>Euro 6</td><td>Euro 6</td></tr>
+          <tr><td>Transmission opt.</td><td>MT6</td><td>MT6/AT6</td><td class="highlight-col">MT6/AT6</td><td>MT6</td><td>MT6</td><td>AT8</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tags" style="margin-top:.8rem;">
+      <span class="tag">★ D4204T16 is the range-topping diesel</span>
+      <span class="tag">Best diesel performance/efficiency balance</span>
+      <span class="tag">Highest torque output in V40 diesel lineup</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ SERVICE & MAINTENANCE ══════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">🛠️</span> Service &amp; Maintenance Intervals</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Scheduled Maintenance</td></tr>
+            <tr><th>Oil &amp; filter change</th><td>Every 20 000 km / 1 year (Volvo VCC-RBS2AE 5W-30)</td></tr>
+            <tr><th>Air filter</th><td>Every 40 000 km</td></tr>
+            <tr><th>Fuel filter</th><td>Every 30 000 km</td></tr>
+            <tr><th>Pollen filter</th><td>Every 20 000 km / 2 years</td></tr>
+            <tr><th>Brake fluid</th><td>Every 2 years (DOT 4+)</td></tr>
+            <tr><th>Coolant</th><td>Every 5 years (Volvo Coolant Type C)</td></tr>
+            <tr><th>Spark plugs</th><td>N/A – diesel</td></tr>
+            <tr><th>Glow plugs</th><td>Inspect every 60 000 km (NGK Y-573J equivalent)</td></tr>
+            <tr><th>Timing belt</th><td>Every 120 000 km or 10 years (with tensioner &amp; idler)</td></tr>
+            <tr><th>DPF ash cleaning</th><td>~240 000 km (workshop procedure)</td></tr>
+            <tr><th>AdBlue refill</th><td>~10 000–12 000 km (warning at ~2.5 L remaining)</td></tr>
+            <tr><th>Inspection interval</th><td>Every 20 000 km / 1 year (Volvo Service Plan)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">OBD &amp; Diagnostics</td></tr>
+            <tr><th>OBD connector</th><td>OBD-II (SAE J1962) – 16-pin, under dashboard (LHD)</td></tr>
+            <tr><th>Protocols</th><td>ISO 15765-4 (CAN), KWP2000 (legacy)</td></tr>
+            <tr><th>Volvo diagnostic software</th><td>VIDA / DiCE (dealer), VIDA2LIFE (extended)</td></tr>
+            <tr><th>Engine ECU</th><td>Bosch EDC17CP22 (32-bit, 64 MHz)</td></tr>
+            <tr><th>Sensor list</th><td>MAF, MAP (intake/EGR), Lambda (wideband), NOₓ (upstream + downstream SCR), DPF pressure, coolant temp, oil pressure, crank/cam position, boost pressure</td></tr>
+            <tr><td class="table-section-header" colspan="2">Known Weak Points</td></tr>
+            <tr><th>EGR valve</th><td>Carbon fouling on LP-EGR at low-speed city use; clean every 60 000 km</td></tr>
+            <tr><th>DPF clogging</th><td>Short-trip driving inhibits passive regen; motorway run every 2–3 weeks recommended</td></tr>
+            <tr><th>CP4.2 pump</th><td>Sensitive to diesel contamination; always use EN590 fuel; avoid misfuelling with petrol</td></tr>
+            <tr><th>Timing belt</th><td>Never delay beyond 120 000 km / 10 years – engine damage if belt fails</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ ENGINE MANAGEMENT ══════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">💻</span> Engine Management &amp; Sensors</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">ECU – Bosch EDC17CP22</td></tr>
+            <tr><th>Architecture</th><td>32-bit PowerPC, 64 MHz clock</td></tr>
+            <tr><th>Flash memory</th><td>4 MB program + 512 kB calibration</td></tr>
+            <tr><th>RAM</th><td>512 kB SRAM</td></tr>
+            <tr><th>Closed-loop strategies</th><td>NOₓ feedback (downstream SCR sensor), lambda feedback (wideband pre-DOC), boost pressure, EGR rate, DPF backpressure</td></tr>
+            <tr><th>Idle speed control</th><td>720 ± 30 rpm (warm engine)</td></tr>
+            <tr><th>Fuel cut-off</th><td>Above 3 750 rpm on overrun (coast decel)</td></tr>
+            <tr><th>Cold-start strategy</th><td>Increased pilot injection + elevated idle 900 rpm; fast glow plug cycle (3.5 s to 1 000 °C via ceramic glow plugs)</td></tr>
+            <tr><th>Start of injection (SOI)</th><td>Map-controlled; −5° to +10° ATDC depending on load/temp</td></tr>
+            <tr><th>Torque management</th><td>Transmission torque demand via CAN; TC/ESC torque reduction via CAN</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <table class="spec-table">
+          <tbody>
+            <tr><td class="table-section-header" colspan="2">Sensor Network</td></tr>
+            <tr><th>Crankshaft position</th><td>Hall-effect, 60-2 tooth wheel, resolution 6°</td></tr>
+            <tr><th>Camshaft position</th><td>Hall-effect, 4-tooth wheel (intake cam only)</td></tr>
+            <tr><th>MAF (mass airflow)</th><td>Bosch HFM6 hot-film anemometer, 0–1 200 kg/h range</td></tr>
+            <tr><th>Intake MAP</th><td>Bosch 4.0 bar absolute MAP sensor, post-intercooler</td></tr>
+            <tr><th>EGR MAP</th><td>Differential pressure, before/after EGR valve</td></tr>
+            <tr><th>Lambda (pre-DOC)</th><td>Bosch LSU4.9 wideband (0.65–10.0 λ)</td></tr>
+            <tr><th>NOₓ sensor (post-SCR)</th><td>Continental NGK, combined λ + NOₓ, range 0–3 000 ppm</td></tr>
+            <tr><th>DPF ΔP</th><td>Sensata 2-port piezoresistive, 0–150 mbar</td></tr>
+            <tr><th>Coolant temperature</th><td>NTC, −40 °C to 130 °C</td></tr>
+            <tr><th>Fuel rail pressure</th><td>Bosch HDP5, 0–2 500 bar, on common rail</td></tr>
+            <tr><th>Oil pressure/temp</th><td>Combined sensor, oil gallery</td></tr>
+            <tr><th>Boost pressure</th><td>Piezo MAP, intake manifold, 0.8–3.0 bar abs</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════ FLUIDS & CAPACITIES ════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">🧪</span> Fluids, Capacities &amp; Specifications</h2>
+
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Fluid</th>
+          <th>Specification</th>
+          <th>Capacity</th>
+          <th>Change Interval</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Engine oil</strong></td><td>Volvo VCC-RBS2AE (ACEA C3), SAE 5W-30</td><td>5.0 L (with filter)</td><td>20 000 km / 1 year</td></tr>
+        <tr><td><strong>Coolant</strong></td><td>Volvo Coolant Type C (OAT, concentrate 1:1)</td><td>7.5 L (total system)</td><td>5 years (top-up as needed)</td></tr>
+        <tr><td><strong>Brake fluid</strong></td><td>DOT 4+ (SAE J1703)</td><td>0.7 L</td><td>Every 2 years</td></tr>
+        <tr><td><strong>Power steering</strong></td><td>N/A – electric EPAS</td><td>N/A</td><td>N/A</td></tr>
+        <tr><td><strong>Automatic trans.</strong></td><td>Aisin ATF-WS / Esso ATF3317</td><td>7.5 L (total) / 3.5 L (service drain)</td><td>Lifetime fill (inspect at 120 000 km)</td></tr>
+        <tr><td><strong>Manual trans.</strong></td><td>MTF-LT-5 (GL-4)</td><td>1.8 L</td><td>Lifetime fill</td></tr>
+        <tr><td><strong>Fuel</strong></td><td>Diesel EN590 B7 max (B10 approved from 2020)</td><td>62 L</td><td>Refill when needed</td></tr>
+        <tr><td><strong>AdBlue (SCR)</strong></td><td>AUS 32 / ISO 22241-1 (32.5 % urea)</td><td>17.5 L</td><td>~10 000 km (fill to brim)</td></tr>
+        <tr><td><strong>Windscreen washer</strong></td><td>Water + 10–30 % ethanol-based concentrate</td><td>4.0 L</td><td>As needed</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ═══════════════════════ TORQUE SPECIFICATIONS ══════════════════════════ -->
+  <section class="card">
+    <h2 class="section-title"><span class="icon">🔑</span> Critical Torque Specifications</h2>
+
+    <div class="two-col">
+      <div>
+        <table class="spec-table">
+          <thead><tr><th>Fastener</th><th>Torque / Method</th></tr></thead>
+          <tbody>
+            <tr><th>Cylinder head bolts</th><td>Stage 1: 30 Nm → Stage 2: +90° → Stage 3: +90°</td></tr>
+            <tr><th>Main bearing caps</th><td>30 Nm + 90° (TTY bolts)</td></tr>
+            <tr><th>Big-end connecting rod</th><td>30 Nm + 90° (TTY bolts)</td></tr>
+            <tr><th>Crankshaft pulley bolt</th><td>200 Nm + 45° (TTY)</td></tr>
+            <tr><th>Flywheel / flexplate bolts</th><td>35 Nm + 30°</td></tr>
+            <tr><th>Camshaft sprocket bolt</th><td>80 Nm (reusable)</td></tr>
+            <tr><th>Timing belt tensioner</th><td>24 Nm</td></tr>
+            <tr><th>Oil drain plug</th><td>25 Nm</td></tr>
+            <tr><th>Oil filter housing</th><td>25 Nm</td></tr>
+            <tr><th>Inlet manifold bolts</th><td>18 Nm</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <table class="spec-table">
+          <thead><tr><th>Fastener</th><th>Torque / Method</th></tr></thead>
+          <tbody>
+            <tr><th>Front wheel nut</th><td>140 Nm</td></tr>
+            <tr><th>Rear wheel nut</th><td>140 Nm</td></tr>
+            <tr><th>Front brake caliper guide bolt</th><td>30 Nm</td></tr>
+            <tr><th>Front brake caliper carrier bolt</th><td>120 Nm</td></tr>
+            <tr><th>Rear brake caliper bolt</th><td>80 Nm</td></tr>
+            <tr><th>Subframe mounting bolts</th><td>105 Nm + 90°</td></tr>
+            <tr><th>Strut top nut</th><td>60 Nm</td></tr>
+            <tr><th>Strut lower pinch bolt</th><td>80 Nm + 45°</td></tr>
+            <tr><th>Driveshaft hub nut</th><td>280 Nm (new nut, TTY)</td></tr>
+            <tr><th>Turbo oil feed banjo bolt</th><td>22 Nm</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:1rem;">
+      <strong>TTY (Torque-to-Yield) bolts</strong> are stretch bolts designed for one-time use only. Always replace TTY fasteners — never reuse them after removal. Reused TTY bolts cannot maintain correct clamping force and may fail, leading to catastrophic engine damage.
+    </div>
+  </section>
+
+</main>
+
+<footer style="text-align:center;padding:1.5rem;color:var(--muted);font-size:.82rem;border-top:1px solid var(--border);background:var(--card);">
+  <p>Volvo V40 Technical Specifications · D4204T16 Drive-E Engine</p>
+  <p style="margin-top:.3rem;">Data sourced from Volvo VIDA workshop documentation &amp; technical service bulletins. For reference only.</p>
+  <p style="margin-top:.5rem;"><a href="../" style="color:var(--volvo-blue);text-decoration:none;">← Back to Czech Fuel Prices</a></p>
+</footer>
+
+</body>
+</html>
