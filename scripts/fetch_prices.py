@@ -182,14 +182,16 @@ TANK_ONO_URL = "https://tank-ono.cz/cz/index.php?page=cenik"
 
 # Default column indices inside each <tr> (0-based), used when no header row is
 # found.  The actual indices are detected dynamically from the table headers.
+# Observed table layout (may vary; detection handles extra columns like E10/E5):
 #   cells[0] = station name
 #   cells[1] = NM 95          ← petrol 95
-#   cells[2] = NM 95 Premium
-#   cells[3] = NM 98
-#   cells[4] = ON             ← standard diesel
-#   cells[5] = ON Premium
-#   cells[6] = AdBlue
-#   cells[7] = LPG
+#   cells[2] = NM 95 E10      (bio-blend variant; excluded from NM 95 detection)
+#   cells[3] = NM 95 Premium
+#   cells[4] = NM 98
+#   cells[5] = ON             ← standard diesel
+#   cells[6] = ON Premium
+#   cells[7] = AdBlue
+#   cells[8] = LPG
 _ONO_NM95_IDX_DEFAULT   = 1
 _ONO_DIESEL_IDX_DEFAULT = 4
 
@@ -214,8 +216,8 @@ def _detect_ono_column_indices(rows) -> tuple[int, int]:
         diesel_idx = _ONO_DIESEL_IDX_DEFAULT
 
         for i, t in enumerate(texts):
-            # NM 95 column – not Premium, not 98
-            if re.search(r"nm\s*95", t) and not re.search(r"premium|98", t):
+            # NM 95 column – not Premium, not 98, not bio-blend variants (E5/E10)
+            if re.search(r"nm\s*95", t) and not re.search(r"premium|98|e10|e5", t):
                 nm95_idx = i
             # ON (diesel) column – not Premium, not AdBlue, not LPG
             if re.search(r"(?:^|\s)on(?:\s|$)|diesel|nafta", t) and not re.search(
