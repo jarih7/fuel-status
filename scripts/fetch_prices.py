@@ -10,8 +10,9 @@ fetch_prices.py – Scrape Czech fuel station prices from:
   5. omv.cz       – OMV Czech Republic stations; flexible multi-strategy parsing.
   6. fuelto.net   – price aggregator; flexible multi-strategy parsing.
   7. ipumpuj.cz   – price aggregator; flexible multi-strategy parsing.
-  8. shell.com    – Shell Czech Republic stations via find.shell.com REST API.
-  9. mol.cz       – MOL Czech Republic stations via mol.cz API + HTML fallback.
+  8. shell.cz     – Shell Czech Republic stations; flexible multi-strategy parsing.
+  9. mol.cz       – MOL Czech Republic stations; flexible multi-strategy parsing.
+ 10. benzina.cz   – Benzina Czech Republic stations; flexible multi-strategy parsing.
 
 Writes combined results to data/prices.json.
 """
@@ -906,6 +907,106 @@ def scrape_ipumpuj() -> list[dict]:
     return stations
 
 
+# ── shell.cz / fleetcor.eu ────────────────────────────────────────────────────
+
+_SHELL_URLS = [
+    "https://www.shell.cz/motorists/shell-fuels/prices.html",
+    "https://www.shell.cz/",
+    "https://fleetcor.eu/cs-cz/reseni/sluzby/vyhledavani-cerpacich-stanic-shell",
+    "https://shell.cz/",
+]
+
+
+def scrape_shell() -> list[dict]:
+    """
+    Attempt to scrape fuel prices from shell.cz / FleetCor Shell station finder.
+    Uses three fallback strategies:
+      1. HTML table rows
+      2. div/li card elements
+      3. JSON data embedded in <script> tags
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching shell.cz …", file=sys.stderr)
+    soup, used_url = _fetch_first(
+        _SHELL_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.shell.cz/"},
+    )
+    if soup is None:
+        print("  [WARN] shell.cz: no URL responded successfully", file=sys.stderr)
+        return []
+
+    stations = _generic_scrape(soup, chain_override="Shell")
+    print(f"  shell.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
+# ── mol.cz ────────────────────────────────────────────────────────────────────
+
+_MOL_URLS = [
+    "https://www.mol.cz/cs/tankujte/ceny/",
+    "https://www.mol.cz/",
+    "https://mol.cz/",
+]
+
+
+def scrape_mol() -> list[dict]:
+    """
+    Attempt to scrape fuel prices from mol.cz.
+    Uses three fallback strategies:
+      1. HTML table rows
+      2. div/li card elements
+      3. JSON data embedded in <script> tags
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching mol.cz …", file=sys.stderr)
+    soup, used_url = _fetch_first(
+        _MOL_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.mol.cz/"},
+    )
+    if soup is None:
+        print("  [WARN] mol.cz: no URL responded successfully", file=sys.stderr)
+        return []
+
+    stations = _generic_scrape(soup, chain_override="MOL")
+    print(f"  mol.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
+# ── benzina.cz ────────────────────────────────────────────────────────────────
+
+_BENZINA_URLS = [
+    "https://www.benzina.cz/cs/cerpaci-stanice/ceny-pohonnych-hmot",
+    "https://www.benzina.cz/",
+    "https://benzina.cz/",
+]
+
+
+def scrape_benzina() -> list[dict]:
+    """
+    Attempt to scrape fuel prices from benzina.cz.
+    Uses three fallback strategies:
+      1. HTML table rows
+      2. div/li card elements
+      3. JSON data embedded in <script> tags
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching benzina.cz …", file=sys.stderr)
+    soup, used_url = _fetch_first(
+        _BENZINA_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.benzina.cz/"},
+    )
+    if soup is None:
+        print("  [WARN] benzina.cz: no URL responded successfully", file=sys.stderr)
+        return []
+
+    stations = _generic_scrape(soup, chain_override="Benzina")
+    print(f"  benzina.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
 # ── generic multi-strategy helpers ────────────────────────────────────────────
 
 def _fetch_first(
@@ -1131,6 +1232,7 @@ def main() -> None:
         scrape_ipumpuj,
         scrape_shell,
         scrape_mol,
+        scrape_benzina,
     )
     for scrape_fn in secondary_scrapers:
         all_stations.extend(scrape_fn())
@@ -1153,14 +1255,15 @@ def main() -> None:
         *[
             re.sub(r"https?://(www\.)?", "", urls[0]).split("/")[0]
             for fn, urls in (
-                (scrape_mbenzin, _MBENZIN_URLS),
-                (scrape_ccs,     _CCS_URLS),
-                (scrape_orlen,   _ORLEN_URLS),
-                (scrape_omv,     _OMV_URLS),
-                (scrape_fuelto,  _FUELTO_URLS),
-                (scrape_ipumpuj, _IPUMPUJ_URLS),
-                (scrape_shell,   _SHELL_FALLBACK_URLS),
-                (scrape_mol,     _MOL_HTML_URLS),
+                (scrape_mbenzin,  _MBENZIN_URLS),
+                (scrape_ccs,      _CCS_URLS),
+                (scrape_orlen,    _ORLEN_URLS),
+                (scrape_omv,      _OMV_URLS),
+                (scrape_fuelto,   _FUELTO_URLS),
+                (scrape_ipumpuj,  _IPUMPUJ_URLS),
+                (scrape_shell,    _SHELL_URLS),
+                (scrape_mol,      _MOL_URLS),
+                (scrape_benzina,  _BENZINA_URLS),
             )
         ],
     ]
