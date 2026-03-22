@@ -308,6 +308,8 @@
     .cmp-table tr:last-child td { border-bottom: none; }
     .cmp-table .highlight-col { background: #EEF3FA; font-weight: 700; color: var(--volvo-blue); }
     .cmp-table tr:hover td { background: #F9FAFB; }
+    .cmp-table th.focus-col { background: var(--green); }
+    .cmp-table td.focus-col { background: #F0FDF4; font-weight: 600; color: #14532d; }
 
     /* ─── Piston diagram ─── */
     .piston-grid {
@@ -1057,6 +1059,7 @@
             <tr><th>Reverse ratio</th><td>3.564</td></tr>
             <tr><th>Final drive ratio</th><td>3.923 (D4 MT)</td></tr>
             <tr><th>Oil capacity</th><td>1.8 L MTF-LT-5 (GL-4)</td></tr>
+            <tr><th>Recommended pairing</th><td><span class="badge badge-green">🔧 D3 (D4204T14)</span> — ideal torque range for row-your-own engagement; lightest drivetrain, best efficiency</td></tr>
           </tbody>
         </table>
       </div>
@@ -1080,6 +1083,9 @@
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="info-box" style="margin-top:1rem;">
+      <strong>🔧 D3 + Getrag M66 Manual – the definitive pairing:</strong> While the D4 maximises outright performance, the <strong>D3 (D4204T14) with the 6-speed Getrag M66 manual</strong> is the most driver-focused diesel combination in the V40 range. Its 320 Nm plateau from 1 750 rpm is perfectly suited to the short, precise throws of the M66; at ~50 kg lighter than the D4 automatic, it responds more keenly and returns best-in-class fuel economy for the diesel range (~3.7 L/100km, 99 g/km CO₂).
     </div>
   </section>
 
@@ -1141,7 +1147,7 @@
           <tr>
             <th>Spec</th>
             <th>D2 (D4204T9)</th>
-            <th>D3 (D4204T14)</th>
+            <th class="focus-col">D3 (D4204T14) 🔧</th>
             <th class="highlight-col">D4 (D4204T16) ★</th>
             <th>T2 1.5 Petrol</th>
             <th>T3 1.5 Petrol</th>
@@ -1149,22 +1155,28 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>Engine</td><td>2.0D I4</td><td>2.0D I4</td><td class="highlight-col">2.0D I4</td><td>1.5T I3</td><td>1.5T I3</td><td>2.0T I4</td></tr>
-          <tr><td>Power (hp)</td><td>115</td><td>150</td><td class="highlight-col">190</td><td>122</td><td>152</td><td>254</td></tr>
-          <tr><td>Torque (Nm)</td><td>280</td><td>320</td><td class="highlight-col">400</td><td>220</td><td>250</td><td>350</td></tr>
-          <tr><td>0–100 km/h (s)</td><td>10.1</td><td>8.3</td><td class="highlight-col">7.9</td><td>9.8</td><td>8.0</td><td>6.4</td></tr>
-          <tr><td>Top speed (km/h)</td><td>205</td><td>220</td><td class="highlight-col">225</td><td>200</td><td>220</td><td>250</td></tr>
-          <tr><td>Fuel economy (L/100km)</td><td>3.7</td><td>3.9</td><td class="highlight-col">4.3</td><td>5.1</td><td>5.5</td><td>7.2</td></tr>
-          <tr><td>CO₂ (g/km)</td><td>99</td><td>104</td><td class="highlight-col">124</td><td>118</td><td>128</td><td>165</td></tr>
-          <tr><td>Emission standard</td><td>Euro 6</td><td>Euro 6</td><td class="highlight-col">Euro 6</td><td>Euro 6</td><td>Euro 6</td><td>Euro 6</td></tr>
-          <tr><td>Transmission opt.</td><td>MT6</td><td>MT6/AT6</td><td class="highlight-col">MT6/AT6</td><td>MT6</td><td>MT6</td><td>AT8</td></tr>
+          <tr><td>Engine</td><td>2.0D I4</td><td class="focus-col">2.0D I4</td><td class="highlight-col">2.0D I4</td><td>1.5T I3</td><td>1.5T I3</td><td>2.0T I4</td></tr>
+          <tr><td>Power (hp)</td><td>115</td><td class="focus-col">150</td><td class="highlight-col">190</td><td>122</td><td>152</td><td>254</td></tr>
+          <tr><td>Torque (Nm)</td><td>280</td><td class="focus-col">320</td><td class="highlight-col">400</td><td>220</td><td>250</td><td>350</td></tr>
+          <tr><td>0–100 km/h (s)</td><td>10.1</td><td class="focus-col">8.3 / 8.1 MT</td><td class="highlight-col">7.9</td><td>9.8</td><td>8.0</td><td>6.4</td></tr>
+          <tr><td>Top speed (km/h)</td><td>205</td><td class="focus-col">220</td><td class="highlight-col">225</td><td>200</td><td>220</td><td>250</td></tr>
+          <tr><td>Fuel economy (L/100km)</td><td>3.7</td><td class="focus-col">3.9 / 3.7 MT</td><td class="highlight-col">4.3</td><td>5.1</td><td>5.5</td><td>7.2</td></tr>
+          <tr><td>CO₂ (g/km)</td><td>99</td><td class="focus-col">104 / 99 MT</td><td class="highlight-col">124</td><td>118</td><td>128</td><td>165</td></tr>
+          <tr><td>Emission standard</td><td>Euro 6</td><td class="focus-col">Euro 6</td><td class="highlight-col">Euro 6</td><td>Euro 6</td><td>Euro 6</td><td>Euro 6</td></tr>
+          <tr><td>Transmission opt.</td><td>MT6</td><td class="focus-col"><strong>MT6</strong> / AT6</td><td class="highlight-col">MT6/AT6</td><td>MT6</td><td>MT6</td><td>AT8</td></tr>
+          <tr><td>Kerb weight</td><td>—</td><td class="focus-col">1 430 kg (MT)</td><td class="highlight-col">1 480 kg (AT)</td><td>—</td><td>—</td><td>—</td></tr>
         </tbody>
       </table>
+    </div>
+    <div class="info-box" style="margin-top:1rem;">
+      <strong>🔧 D3 + Manual Gearbox – the driver's sweet spot:</strong> The D3 (D4204T14) paired with the 6-speed Getrag M66 manual offers the most engaging driving experience in the V40 diesel lineup. At ~50 kg lighter than the D4 automatic, with 320 Nm of torque from 1 750 rpm and an unfiltered mechanical connection to the engine, it combines real-world efficiency (~3.7 L/100km), 99 g/km CO₂, and a direct, driver-focused character that the torque-converter automatic simply cannot replicate.
     </div>
     <div class="tags" style="margin-top:.8rem;">
       <span class="tag">★ D4204T16 is the range-topping diesel</span>
       <span class="tag">Best diesel performance/efficiency balance</span>
       <span class="tag">Highest torque output in V40 diesel lineup</span>
+      <span class="tag" style="background:#D1FAE5;border-color:#6EE7B7;color:#14532d;">🔧 D3 MT6 – lightest, most efficient diesel variant</span>
+      <span class="tag" style="background:#D1FAE5;border-color:#6EE7B7;color:#14532d;">D3 manual: 99 g/km CO₂ · lightest diesel</span>
     </div>
   </section>
 
