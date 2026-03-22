@@ -482,7 +482,10 @@
 </main>
 
 <footer>
-  Data: <a href="https://www.tank-ono.cz/cz/index.php?page=cenik" target="_blank" rel="noopener">tank-ono.cz</a> &mdash;
+  Data: <a href="https://www.tank-ono.cz/cz/index.php?page=cenik" target="_blank" rel="noopener">tank-ono.cz</a>,
+  <a href="https://find.shell.com/cz/fuel/locations" target="_blank" rel="noopener">find.shell.com</a>,
+  <a href="https://www.mol.cz/cerpaci-stanice/" target="_blank" rel="noopener">mol.cz</a>,
+  <a href="https://www.orlen.cz/stanice" target="_blank" rel="noopener">orlen.cz</a> &mdash;
   Ceny jsou orientační a mohou se lišit od aktuálních cen na čerpací stanici.
   Automaticky aktualizováno každých 24 hodin.
 </footer>
@@ -750,9 +753,10 @@
       const jitter = () => (Math.random() - 0.5) * JITTER_DEG;
       const pos = [coords[0] + jitter(), coords[1] + jitter()];
 
-      const cls   = priceClass(s.petrol_95, p95min, p95max);
-      const color = tierColor[cls];
-      const bg    = tierBg[cls];
+      const hasPrice = s.petrol_95 > 0;
+      const cls   = hasPrice ? priceClass(s.petrol_95, p95min, p95max) : "price-mid";
+      const color = hasPrice ? tierColor[cls] : "#888";
+      const bg    = hasPrice ? tierBg[cls]    : "#E0E0E0";
 
       const marker = L.circleMarker(pos, {
         radius: 9,
@@ -765,8 +769,10 @@
 
       const chainLabel = s.chain === "Ostatní" ? s.name : s.chain;
       const cityText   = s.city ? `<div class="map-popup-city">${escHtml(s.city)}</div>` : "";
-      const p95Cls     = priceClass(s.petrol_95, p95min, p95max);
-      const dCls       = priceClass(s.diesel, dmin, dmax);
+      const p95Cls     = s.petrol_95 > 0 ? priceClass(s.petrol_95, p95min, p95max) : "";
+      const dCls       = s.diesel    > 0 ? priceClass(s.diesel,    dmin,   dmax)   : "";
+      const p95Style   = p95Cls ? `background:${tierBg[p95Cls]};color:${tierColor[p95Cls]}` : "background:#E0E0E0;color:#555";
+      const dStyle     = dCls   ? `background:${tierBg[dCls]};color:${tierColor[dCls]}`     : "background:#E0E0E0;color:#555";
 
       const popup = `
         <div class="map-popup-content">
@@ -774,11 +780,11 @@
           <div class="map-popup-subtitle">${escHtml(s.name)}</div>
           ${cityText}
           <div class="map-popup-prices">
-            <span class="map-popup-price ${p95Cls}" style="background:${tierBg[p95Cls]};color:${tierColor[p95Cls]}">
-              N95: ${s.petrol_95.toFixed(2)} Kč/l
+            <span class="map-popup-price ${p95Cls}" style="${p95Style}">
+              N95: ${s.petrol_95 > 0 ? s.petrol_95.toFixed(2) + " Kč/l" : "—"}
             </span>
-            <span class="map-popup-price ${dCls}" style="background:${tierBg[dCls]};color:${tierColor[dCls]}">
-              Diesel: ${s.diesel.toFixed(2)} Kč/l
+            <span class="map-popup-price ${dCls}" style="${dStyle}">
+              Diesel: ${s.diesel > 0 ? s.diesel.toFixed(2) + " Kč/l" : "—"}
             </span>
           </div>
         </div>`;
@@ -977,11 +983,11 @@
         <td class="station-name">${badge(s.chain, s.name)}${s.chain === 'Ostatní' ? '' : escHtml(s.name)}</td>
         <td>${escHtml(s.city)}</td>
         <td class="station-address">${escHtml(s.address)}</td>
-        <td class="price-cell ${priceClass(s.petrol_95, p95min, p95max)}">
-          ${s.petrol_95.toFixed(2)}<span class="unit">Kč/l</span>
+        <td class="price-cell ${s.petrol_95 > 0 ? priceClass(s.petrol_95, p95min, p95max) : ''}">
+          ${s.petrol_95 > 0 ? s.petrol_95.toFixed(2) + '<span class="unit">Kč/l</span>' : '—'}
         </td>
-        <td class="price-cell ${priceClass(s.diesel, dmin, dmax)}">
-          ${s.diesel.toFixed(2)}<span class="unit">Kč/l</span>
+        <td class="price-cell ${s.diesel > 0 ? priceClass(s.diesel, dmin, dmax) : ''}">
+          ${s.diesel > 0 ? s.diesel.toFixed(2) + '<span class="unit">Kč/l</span>' : '—'}
         </td>
       </tr>`
     ).join("");

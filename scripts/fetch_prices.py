@@ -6,10 +6,12 @@ fetch_prices.py – Scrape Czech fuel station prices from:
                                Single-page CZK price table; column layout detected from headers.
   2. mbenzin.cz   (secondary) – price aggregator; flexible multi-strategy parsing.
   3. ccs.cz       – CCS fleet-card network; flexible multi-strategy parsing.
-  4. orlen.cz     – Orlen Czech Republic stations; flexible multi-strategy parsing.
+  4. orlen.cz     – Orlen/Benzina Czech Republic stations; REST API + JSON/HTML fallback.
   5. omv.cz       – OMV Czech Republic stations; flexible multi-strategy parsing.
   6. fuelto.net   – price aggregator; flexible multi-strategy parsing.
   7. ipumpuj.cz   – price aggregator; flexible multi-strategy parsing.
+  8. shell.com    – Shell Czech Republic stations via find.shell.com REST API.
+  9. mol.cz       – MOL Czech Republic stations via mol.cz API + HTML fallback.
 
 Writes combined results to data/prices.json.
 """
@@ -497,7 +499,7 @@ def scrape_ccs() -> list[dict]:
     return stations
 
 
-# ── orlen.cz ──────────────────────────────────────────────────────────────────
+# ── orlen.cz / benzina.cz (Benzina brand) ────────────────────────────────────
 
 _ORLEN_URLS = [
     "https://www.orlen.cz/stanice",
@@ -506,17 +508,37 @@ _ORLEN_URLS = [
     "https://www.orlen.cz/",
 ]
 
+# Orlen REST API endpoints (Next.js / custom REST)
+_ORLEN_API_URLS = [
+    "https://www.orlen.cz/api/stations",
+    "https://www.orlen.cz/api/v1/stations",
+    "https://www.orlen.cz/api/stanice",
+]
+
 
 def scrape_orlen() -> list[dict]:
     """
-    Attempt to scrape fuel prices from orlen.cz.
-    Uses three fallback strategies:
-      1. HTML table rows
-      2. div/li card elements
-      3. JSON data embedded in <script> tags
+    Attempt to scrape Orlen/Benzina CZ stations from orlen.cz.
+    Tries the Orlen REST API first, then falls back to HTML scraping.
     Returns a (possibly empty) list of station dicts.
     """
-    print("  Fetching orlen.cz …", file=sys.stderr)
+    print("  Fetching orlen.cz (Benzina) …", file=sys.stderr)
+
+    # Strategy A: REST API
+    api_hdrs = {**HEADERS, "Accept": "application/json", "X-Requested-With": "XMLHttpRequest"}
+    for api_url in _ORLEN_API_URLS:
+        try:
+            resp = requests.get(api_url, headers=api_hdrs, timeout=20)
+            if resp.status_code == 200 and "json" in resp.headers.get("content-type", ""):
+                data = resp.json()
+                stations = _parse_orlen_json(data)
+                if stations:
+                    print(f"  orlen.cz API ({api_url}): {len(stations)} stations", file=sys.stderr)
+                    return stations
+        except Exception as exc:
+            print(f"  [WARN] orlen.cz API {api_url}: {exc}", file=sys.stderr)
+
+    # Strategy B: HTML scraping
     soup, used_url = _fetch_first(
         _ORLEN_URLS,
         min_bytes=1000,
@@ -526,8 +548,259 @@ def scrape_orlen() -> list[dict]:
         print("  [WARN] orlen.cz: no URL responded successfully", file=sys.stderr)
         return []
 
-    stations = _generic_scrape(soup, chain_override="Orlen")
-    print(f"  orlen.cz ({used_url}): {len(stations)} stations", file=sys.stderr)
+    stations = _generic_scrape(soup, chain_override="Benzina")
+    print(f"  orlen.cz HTML ({used_url}): {len(stations)} stations", file=sys.stderr)
+    return stations
+
+
+def _parse_orlen_json(data) -> list[dict]:
+    """Parse the Orlen/Benzina REST API JSON response."""
+    if isinstance(data, list):
+        results = data
+    else:
+        results = (
+            data.get("stations") or
+            data.get("results") or
+            data.get("data") or
+            data.get("items") or
+            []
+        )
+
+    stations: list[dict] = []
+    for item in results:
+        if not isinstance(item, dict):
+            continue
+        name = item.get("name") or item.get("nazev") or item.get("title") or ""
+        city = item.get("city") or item.get("mesto") or item.get("obec") or ""
+        address = item.get("address") or item.get("adresa") or item.get("street") or ""
+        if not name:
+            continue
+
+        _, region = city_and_region(city or name)
+        stations.append({
+            "name":         _build_station_label(name, "Benzina"),
+            "chain":        "Benzina",
+            "city":         city,
+            "region":       region,
+            "address":      address,
+            "petrol_95":    _extract_price(item, "natural95", "nm95", "petrol95"),
+            "diesel":       _extract_price(item, "diesel", "nafta"),
+            "last_updated": datetime.date.today().isoformat(),
+        })
+    return stations
+
+
+# ── Shell CZ (find.shell.com) ─────────────────────────────────────────────────
+
+# Shell Find geolocation API – bounding-box centred on Czech Republic.
+# The API returns all retail stations within *radius* km of the given point.
+# Czech Republic fits comfortably in a 400 km circle from 49.8°N 15.5°E.
+_SHELL_API_URL = "https://find.shell.com/api/v1/stationfinder/geolocation"
+_SHELL_API_PARAMS = {
+    "lat": 49.8,
+    "lng": 15.5,
+    "country": "CZ",
+    "radius": 400,
+    "types": "retail",
+    "lang": "cs",
+    "pageSize": 500,
+    "page": 0,
+}
+_SHELL_FALLBACK_URLS = [
+    "https://find.shell.com/cz/fuel/locations",
+    "https://find.shell.com/cz",
+]
+
+
+def scrape_shell() -> list[dict]:
+    """
+    Fetch Shell CZ station list from the Shell Find REST API.
+    Falls back to HTML scraping of find.shell.com/cz if the API fails.
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching Shell CZ (find.shell.com) …", file=sys.stderr)
+
+    # Strategy A: Shell Find REST API
+    try:
+        resp = requests.get(
+            _SHELL_API_URL,
+            params=_SHELL_API_PARAMS,
+            headers={**HEADERS, "Accept": "application/json"},
+            timeout=30,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            stations = _parse_shell_json(data)
+            if stations:
+                print(f"  Shell API: {len(stations)} stations", file=sys.stderr)
+                return stations
+    except Exception as exc:
+        print(f"  [WARN] Shell API failed: {exc}", file=sys.stderr)
+
+    # Strategy B: HTML scraping
+    soup, used_url = _fetch_first(
+        _SHELL_FALLBACK_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://find.shell.com/"},
+    )
+    if soup is not None:
+        stations = _generic_scrape(soup, chain_override="Shell")
+        print(f"  Shell HTML ({used_url}): {len(stations)} stations", file=sys.stderr)
+        return stations
+
+    print("  [WARN] Shell: no data obtained from any source", file=sys.stderr)
+    return []
+
+
+def _parse_shell_json(data) -> list[dict]:
+    """Parse the Shell Find API JSON response (handles several known response shapes)."""
+    if isinstance(data, list):
+        results = data
+    else:
+        results = (
+            data.get("stationResults") or
+            data.get("results") or
+            data.get("stations") or
+            (data.get("data") or {}).get("stations") or
+            []
+        )
+
+    stations: list[dict] = []
+    for item in results:
+        if not isinstance(item, dict):
+            continue
+        name = (
+            item.get("name") or
+            item.get("siteName") or
+            item.get("stationName") or
+            ""
+        )
+        city = (
+            item.get("city") or
+            item.get("town") or
+            item.get("municipality") or
+            ""
+        )
+        address = (
+            item.get("address") or
+            item.get("street") or
+            item.get("addressLine1") or
+            ""
+        )
+        if not name:
+            continue
+
+        # Prices may or may not be present in the locator response
+        prices_raw = item.get("prices") or item.get("fuelPrices") or {}
+        _, region = city_and_region(city or name)
+        stations.append({
+            "name":         _build_station_label(name, "Shell"),
+            "chain":        "Shell",
+            "city":         city,
+            "region":       region,
+            "address":      address,
+            "petrol_95":    _extract_price(prices_raw, "unleaded", "natural95", "petrol95"),
+            "diesel":       _extract_price(prices_raw, "diesel", "gasoil"),
+            "last_updated": datetime.date.today().isoformat(),
+        })
+    return stations
+
+
+# ── MOL CZ (mol.cz) ───────────────────────────────────────────────────────────
+
+_MOL_API_URLS = [
+    "https://www.mol.cz/api/stationFinder/getStations",
+    "https://www.mol.cz/api/stations",
+    "https://www.mol.cz/api/v1/stations",
+    "https://www.mol.cz/api/stanice",
+]
+_MOL_HTML_URLS = [
+    "https://www.mol.cz/cerpaci-stanice/",
+    "https://mol.cz/cerpaci-stanice/",
+    "https://www.mol.cz/",
+]
+
+
+def scrape_mol() -> list[dict]:
+    """
+    Fetch MOL CZ station list from mol.cz REST API or by HTML scraping.
+    Returns a (possibly empty) list of station dicts.
+    """
+    print("  Fetching MOL CZ (mol.cz) …", file=sys.stderr)
+
+    # Strategy A: REST API
+    api_hdrs = {**HEADERS, "Accept": "application/json", "X-Requested-With": "XMLHttpRequest"}
+    for api_url in _MOL_API_URLS:
+        try:
+            resp = requests.get(api_url, headers=api_hdrs, timeout=20)
+            if resp.status_code == 200 and "json" in resp.headers.get("content-type", ""):
+                data = resp.json()
+                stations = _parse_mol_json(data)
+                if stations:
+                    print(f"  MOL API ({api_url}): {len(stations)} stations", file=sys.stderr)
+                    return stations
+        except Exception as exc:
+            print(f"  [WARN] MOL API {api_url}: {exc}", file=sys.stderr)
+
+    # Strategy B: HTML scraping
+    soup, used_url = _fetch_first(
+        _MOL_HTML_URLS,
+        min_bytes=1000,
+        extra_headers={"Referer": "https://www.mol.cz/"},
+    )
+    if soup is not None:
+        stations = _generic_scrape(soup, chain_override="MOL")
+        print(f"  MOL HTML ({used_url}): {len(stations)} stations", file=sys.stderr)
+        return stations
+
+    print("  [WARN] MOL: no data obtained from any source", file=sys.stderr)
+    return []
+
+
+def _parse_mol_json(data) -> list[dict]:
+    """Parse the MOL CZ API JSON response (handles several known response shapes)."""
+    if isinstance(data, list):
+        results = data
+    else:
+        results = (
+            data.get("stations") or
+            data.get("results") or
+            data.get("data") or
+            data.get("items") or
+            []
+        )
+
+    stations: list[dict] = []
+    for item in results:
+        if not isinstance(item, dict):
+            continue
+        name = (
+            item.get("name") or
+            item.get("nazev") or
+            item.get("title") or
+            ""
+        )
+        city = (
+            item.get("city") or
+            item.get("mesto") or
+            item.get("obec") or
+            ""
+        )
+        address = item.get("address") or item.get("adresa") or ""
+        if not name:
+            continue
+
+        _, region = city_and_region(city or name)
+        stations.append({
+            "name":         _build_station_label(name, "MOL"),
+            "chain":        "MOL",
+            "city":         city,
+            "region":       region,
+            "address":      address,
+            "petrol_95":    _extract_price(item, "natural95", "nm95", "petrol"),
+            "diesel":       _extract_price(item, "diesel", "nafta"),
+            "last_updated": datetime.date.today().isoformat(),
+        })
     return stations
 
 
@@ -772,13 +1045,36 @@ def _parse_generic_card(element, chain_override: str | None = None) -> dict | No
 
 # ── shared helpers ────────────────────────────────────────────────────────────
 
+def _extract_price(item: dict, *field_names: str) -> float:
+    """
+    Try each field name in order and return the first parseable price, or 0.0.
+    Intended for the per-chain JSON parsers.
+    """
+    for field in field_names:
+        val = item.get(field, "")
+        if val:
+            price = parse_price(str(val))
+            if price:
+                return price
+    return 0.0
+
+
+def _build_station_label(name: str, chain: str) -> str:
+    """
+    Prefix *name* with the chain name if the chain name is not already present.
+    """
+    if chain.lower() in name.lower():
+        return name
+    return f"{chain} – {name}"
+
+
 def infer_chain(name: str) -> str:
     n = name.lower()
     for kw, chain in [
         ("tank ono", "Tank ONO"), ("ono",     "Tank ONO"),
         ("shell",    "Shell"),    ("omv",     "OMV"),
-        (" mol",     "MOL"),      ("mol ",    "MOL"),
-        ("orlen",    "Orlen"),    ("benzina",  "Benzina"),
+        (" mol",     "MOL"),      ("mol ",    "MOL"),      ("mol –",   "MOL"),
+        ("orlen",    "Benzina"),  ("benzina", "Benzina"),
         ("eurooil",  "EuroOil"),  ("euro oil","EuroOil"),
         ("globus",   "Globus"),   ("čepro",   "ČEPRO"),
         ("cepro",    "ČEPRO"),    ("ccs",     "CCS"),
@@ -833,6 +1129,8 @@ def main() -> None:
         scrape_omv,
         scrape_fuelto,
         scrape_ipumpuj,
+        scrape_shell,
+        scrape_mol,
     )
     for scrape_fn in secondary_scrapers:
         all_stations.extend(scrape_fn())
@@ -861,6 +1159,8 @@ def main() -> None:
                 (scrape_omv,     _OMV_URLS),
                 (scrape_fuelto,  _FUELTO_URLS),
                 (scrape_ipumpuj, _IPUMPUJ_URLS),
+                (scrape_shell,   _SHELL_FALLBACK_URLS),
+                (scrape_mol,     _MOL_HTML_URLS),
             )
         ],
     ]
