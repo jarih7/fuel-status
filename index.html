@@ -556,12 +556,14 @@
     };
 
     /* build rows */
-    const badge = chain =>
-      `<span class="chain-badge badge-${escHtml(chain)}">${escHtml(chain)}</span>`;
+    const badge = (chain, name) => {
+      const label = chain === 'Ostatní' ? name : chain;
+      return `<span class="chain-badge badge-${escHtml(chain)}">${escHtml(label)}</span>`;
+    };
 
     const rows = filtered.map(s =>
       `<tr>
-        <td class="station-name">${badge(s.chain)}${escHtml(s.name)}</td>
+        <td class="station-name">${badge(s.chain, s.name)}${s.chain === 'Ostatní' ? '' : escHtml(s.name)}</td>
         <td>${escHtml(s.city)}</td>
         <td class="station-address">${escHtml(s.address)}</td>
         <td class="price-cell ${priceClass(s.petrol_95, p95min, p95max)}">
