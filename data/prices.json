@@ -1,527 +1,21 @@
 {
-  "last_updated": "2026-04-21T06:39:04Z",
+  "last_updated": "2026-04-22T06:39:26Z",
   "source": "tank-ono.cz + mbenzin.cz + ccs.cz + orlen.cz + omv.cz + fuelto.net + ipumpuj.cz + shell.cz + mol.cz + benzina.cz",
   "averages": {
-    "petrol_95": 39.37,
-    "diesel": 40.55
+    "petrol_95": 40.6,
+    "diesel": 42.93
   },
   "stations": [
-    {
-      "name": "Tank ONO – ČS Plzeň, Domažlická",
-      "chain": "Tank ONO",
-      "city": "Plzeň",
-      "region": "Plzeňský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 1
-    },
-    {
-      "name": "Tank ONO – ČS Nýřany",
-      "chain": "Tank ONO",
-      "city": "ČS Nýřany",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 2
-    },
-    {
-      "name": "Tank ONO – ČS Plzeň, Studentská",
-      "chain": "Tank ONO",
-      "city": "Plzeň",
-      "region": "Plzeňský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 3
-    },
-    {
-      "name": "Tank ONO – ČS Sokolov",
-      "chain": "Tank ONO",
-      "city": "Sokolov",
-      "region": "Karlovarský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 4
-    },
-    {
-      "name": "Tank ONO – ČS Teplice",
-      "chain": "Tank ONO",
-      "city": "Teplice",
-      "region": "Ústecký",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 5
-    },
-    {
-      "name": "Tank ONO – ČS Cheb",
-      "chain": "Tank ONO",
-      "city": "Cheb",
-      "region": "Karlovarský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 6
-    },
-    {
-      "name": "Tank ONO – ČS Milovice u Hořic",
-      "chain": "Tank ONO",
-      "city": "ČS Milovice u Hořic",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 7
-    },
-    {
-      "name": "Tank ONO – ČS Chlumec",
-      "chain": "Tank ONO",
-      "city": "ČS Chlumec",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 8
-    },
-    {
-      "name": "Tank ONO – ČS Jihlava",
-      "chain": "Tank ONO",
-      "city": "Jihlava",
-      "region": "Vysočina",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 9
-    },
-    {
-      "name": "Tank ONO – ČS Trutnov",
-      "chain": "Tank ONO",
-      "city": "Trutnov",
-      "region": "Královéhradecký",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 10
-    },
-    {
-      "name": "Tank ONO – ČS Jindřichův Hradec",
-      "chain": "Tank ONO",
-      "city": "ČS Jindřichův Hradec",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 11
-    },
-    {
-      "name": "Tank ONO – ČS Vysoké Mýto",
-      "chain": "Tank ONO",
-      "city": "ČS Vysoké Mýto",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 12
-    },
-    {
-      "name": "Tank ONO – ČS Havraň",
-      "chain": "Tank ONO",
-      "city": "ČS Havraň",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 13
-    },
-    {
-      "name": "Tank ONO – ČS Kolaje u Poděbrad",
-      "chain": "Tank ONO",
-      "city": "ČS Kolaje u Poděbrad",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 14
-    },
-    {
-      "name": "Tank ONO – ČS Ústí n. L., Božtěšická",
-      "chain": "Tank ONO",
-      "city": "ČS Ústí n. L.",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 15
-    },
-    {
-      "name": "Tank ONO – ČS Praha, Dolní Měcholupy",
-      "chain": "Tank ONO",
-      "city": "Praha",
-      "region": "Praha",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 16
-    },
-    {
-      "name": "Tank ONO – ČS Kbelnice",
-      "chain": "Tank ONO",
-      "city": "ČS Kbelnice",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 17
-    },
-    {
-      "name": "Tank ONO – ČS Havlovice u Domažlic",
-      "chain": "Tank ONO",
-      "city": "ČS Havlovice u Domažlic",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 18
-    },
-    {
-      "name": "Tank ONO – ČS Mělník",
-      "chain": "Tank ONO",
-      "city": "Mělník",
-      "region": "Středočeský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 19
-    },
-    {
-      "name": "Tank ONO – ČS Krupá u Rakovníka",
-      "chain": "Tank ONO",
-      "city": "Rakovník",
-      "region": "Středočeský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 20
-    },
-    {
-      "name": "Tank ONO – ČS Dolní Dvořiště - ONO I",
-      "chain": "Tank ONO",
-      "city": "ČS Dolní Dvořiště",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 21
-    },
-    {
-      "name": "Tank ONO – ČS Dolní Dvořiště - ONO II",
-      "chain": "Tank ONO",
-      "city": "ČS Dolní Dvořiště",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 22
-    },
-    {
-      "name": "Tank ONO – ČS Církvice u Kutné Hory",
-      "chain": "Tank ONO",
-      "city": "ČS Církvice u Kutné Hory",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 23
-    },
-    {
-      "name": "Tank ONO – ČS Sukorady u Mladé Boleslavi",
-      "chain": "Tank ONO",
-      "city": "ČS Sukorady u Mladé Boleslavi",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 24
-    },
-    {
-      "name": "Tank ONO – ČS Podolí u Písku",
-      "chain": "Tank ONO",
-      "city": "ČS Podolí u Písku",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 25
-    },
-    {
-      "name": "Tank ONO – ČS Planá nad Lužnicí",
-      "chain": "Tank ONO",
-      "city": "ČS Planá nad Lužnicí",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 26
-    },
-    {
-      "name": "Tank ONO – ČS Spytihněv",
-      "chain": "Tank ONO",
-      "city": "ČS Spytihněv",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 27
-    },
-    {
-      "name": "Tank ONO – ČS Mošnov",
-      "chain": "Tank ONO",
-      "city": "ČS Mošnov",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 28
-    },
-    {
-      "name": "Tank ONO – ČS Kojetice-Tůmovka",
-      "chain": "Tank ONO",
-      "city": "ČS Kojetice",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 29
-    },
-    {
-      "name": "Tank ONO – ČS Cvikov",
-      "chain": "Tank ONO",
-      "city": "ČS Cvikov",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 30
-    },
-    {
-      "name": "Tank ONO – ČS Chomutov - Přečaply",
-      "chain": "Tank ONO",
-      "city": "Chomutov",
-      "region": "Ústecký",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 31
-    },
-    {
-      "name": "Tank ONO – ČS Zádveřice u Zlína",
-      "chain": "Tank ONO",
-      "city": "Zlín",
-      "region": "Zlínský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 32
-    },
-    {
-      "name": "Tank ONO – ČS Brno-Popovice",
-      "chain": "Tank ONO",
-      "city": "Brno",
-      "region": "Jihomoravský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 33
-    },
-    {
-      "name": "Tank ONO – ČS Roudnice nad Labem",
-      "chain": "Tank ONO",
-      "city": "ČS Roudnice nad Labem",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 34
-    },
-    {
-      "name": "Tank ONO – ČS Vysokov u Náchoda",
-      "chain": "Tank ONO",
-      "city": "Náchod",
-      "region": "Královéhradecký",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 35
-    },
-    {
-      "name": "Tank ONO – ČS Praha -  Štěrboholy",
-      "chain": "Tank ONO",
-      "city": "Praha",
-      "region": "Praha",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 36
-    },
-    {
-      "name": "Tank ONO – ČS Řasnice-Strážný",
-      "chain": "Tank ONO",
-      "city": "ČS Řasnice",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 37
-    },
-    {
-      "name": "Tank ONO – ČS Břest u Kroměříže",
-      "chain": "Tank ONO",
-      "city": "Kroměříž",
-      "region": "Zlínský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 38
-    },
-    {
-      "name": "Tank ONO – ČS Vojtanov",
-      "chain": "Tank ONO",
-      "city": "ČS Vojtanov",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 39
-    },
-    {
-      "name": "Tank ONO – ČS Dobkovice u Děčína",
-      "chain": "Tank ONO",
-      "city": "Děčín",
-      "region": "Ústecký",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 40
-    },
-    {
-      "name": "Tank ONO – ČS Březno u Loun D7",
-      "chain": "Tank ONO",
-      "city": "ČS Březno u Loun D7",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 41
-    },
-    {
-      "name": "Tank ONO – ČS Brno-Hviezdoslavova",
-      "chain": "Tank ONO",
-      "city": "Brno",
-      "region": "Jihomoravský",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 42
-    },
-    {
-      "name": "Tank ONO – ČS Studénka - D1 exit 336",
-      "chain": "Tank ONO",
-      "city": "ČS Studénka",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 43
-    },
-    {
-      "name": "Tank ONO – ČS Ostrov nad Ohří",
-      "chain": "Tank ONO",
-      "city": "ČS Ostrov nad Ohří",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 44
-    },
-    {
-      "name": "Tank ONO – ČS Chlumčany u Přeštic",
-      "chain": "Tank ONO",
-      "city": "ČS Chlumčany u Přeštic",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 45
-    },
-    {
-      "name": "Tank ONO – ČS Rumburk",
-      "chain": "Tank ONO",
-      "city": "ČS Rumburk",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 38.9,
-      "diesel": 39.5,
-      "last_updated": "2026-04-21",
-      "id": 46
-    },
     {
       "name": "Praha",
       "chain": "Ostatní",
       "city": "",
       "region": "Praha",
       "address": "",
-      "petrol_95": 41.08,
-      "diesel": 43.23,
-      "last_updated": "2026-04-21",
-      "id": 47
+      "petrol_95": 40.87,
+      "diesel": 42.2,
+      "last_updated": "2026-04-22",
+      "id": 1
     },
     {
       "name": "Středočeský kraj",
@@ -529,10 +23,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.78,
-      "diesel": 43.56,
-      "last_updated": "2026-04-21",
-      "id": 48
+      "petrol_95": 40.68,
+      "diesel": 42.88,
+      "last_updated": "2026-04-22",
+      "id": 2
     },
     {
       "name": "Moravskoslezský kraj",
@@ -540,10 +34,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.64,
-      "diesel": 43.47,
-      "last_updated": "2026-04-21",
-      "id": 49
+      "petrol_95": 40.56,
+      "diesel": 42.71,
+      "last_updated": "2026-04-22",
+      "id": 3
     },
     {
       "name": "Jihomoravský kraj",
@@ -551,10 +45,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.74,
-      "diesel": 43.39,
-      "last_updated": "2026-04-21",
-      "id": 50
+      "petrol_95": 40.6,
+      "diesel": 42.69,
+      "last_updated": "2026-04-22",
+      "id": 4
     },
     {
       "name": "Ústecký kraj",
@@ -562,10 +56,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.68,
-      "diesel": 43.36,
-      "last_updated": "2026-04-21",
-      "id": 51
+      "petrol_95": 40.57,
+      "diesel": 42.83,
+      "last_updated": "2026-04-22",
+      "id": 5
     },
     {
       "name": "Olomoucký kraj",
@@ -573,10 +67,10 @@
       "city": "",
       "region": "Olomoucký",
       "address": "",
-      "petrol_95": 40.6,
-      "diesel": 43.57,
-      "last_updated": "2026-04-21",
-      "id": 52
+      "petrol_95": 40.44,
+      "diesel": 42.78,
+      "last_updated": "2026-04-22",
+      "id": 6
     },
     {
       "name": "Jihočeský kraj",
@@ -584,10 +78,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.42,
-      "diesel": 43.59,
-      "last_updated": "2026-04-21",
-      "id": 53
+      "petrol_95": 40.33,
+      "diesel": 43.08,
+      "last_updated": "2026-04-22",
+      "id": 7
     },
     {
       "name": "Plzeňský kraj",
@@ -595,10 +89,10 @@
       "city": "",
       "region": "Plzeňský",
       "address": "",
-      "petrol_95": 40.93,
-      "diesel": 44.12,
-      "last_updated": "2026-04-21",
-      "id": 54
+      "petrol_95": 40.86,
+      "diesel": 43.67,
+      "last_updated": "2026-04-22",
+      "id": 8
     },
     {
       "name": "Karlovarský kraj",
@@ -606,10 +100,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 41.1,
-      "diesel": 43.83,
-      "last_updated": "2026-04-21",
-      "id": 55
+      "petrol_95": 40.94,
+      "diesel": 43.14,
+      "last_updated": "2026-04-22",
+      "id": 9
     },
     {
       "name": "Liberecký kraj",
@@ -617,10 +111,10 @@
       "city": "",
       "region": "Liberecký",
       "address": "",
-      "petrol_95": 40.72,
-      "diesel": 43.67,
-      "last_updated": "2026-04-21",
-      "id": 56
+      "petrol_95": 40.66,
+      "diesel": 42.94,
+      "last_updated": "2026-04-22",
+      "id": 10
     },
     {
       "name": "Královehradecký kraj",
@@ -628,10 +122,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.49,
-      "diesel": 43.58,
-      "last_updated": "2026-04-21",
-      "id": 57
+      "petrol_95": 40.38,
+      "diesel": 42.91,
+      "last_updated": "2026-04-22",
+      "id": 11
     },
     {
       "name": "Pardubický kraj",
@@ -639,10 +133,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.6,
-      "diesel": 43.3,
-      "last_updated": "2026-04-21",
-      "id": 58
+      "petrol_95": 40.45,
+      "diesel": 42.67,
+      "last_updated": "2026-04-22",
+      "id": 12
     },
     {
       "name": "Kraj Vysočina",
@@ -650,10 +144,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.79,
-      "diesel": 44.06,
-      "last_updated": "2026-04-21",
-      "id": 59
+      "petrol_95": 40.68,
+      "diesel": 43.41,
+      "last_updated": "2026-04-22",
+      "id": 13
     },
     {
       "name": "Zlínský kraj",
@@ -661,10 +155,10 @@
       "city": "",
       "region": "Zlínský",
       "address": "",
-      "petrol_95": 40.49,
-      "diesel": 43.21,
-      "last_updated": "2026-04-21",
-      "id": 60
+      "petrol_95": 40.31,
+      "diesel": 42.56,
+      "last_updated": "2026-04-22",
+      "id": 14
     },
     {
       "name": "Dnes",
@@ -672,10 +166,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.71,
-      "diesel": 43.54,
-      "last_updated": "2026-04-21",
-      "id": 61
+      "petrol_95": 40.59,
+      "diesel": 42.87,
+      "last_updated": "2026-04-22",
+      "id": 15
     },
     {
       "name": "Včera",
@@ -683,10 +177,10 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 40.77,
-      "diesel": 43.75,
-      "last_updated": "2026-04-21",
-      "id": 62
+      "petrol_95": 40.71,
+      "diesel": 43.54,
+      "last_updated": "2026-04-22",
+      "id": 16
     }
   ]
 }
