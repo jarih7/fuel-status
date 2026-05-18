@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-05-17T06:59:37Z",
+  "last_updated": "2026-05-18T07:23:28Z",
   "source": "tank-ono.cz + mbenzin.cz + ccs.cz + orlen.cz + omv.cz + fuelto.net + ipumpuj.cz + shell.cz + mol.cz + benzina.cz",
   "averages": {
-    "petrol_95": 42.13,
-    "diesel": 42.16
+    "petrol_95": 42.15,
+    "diesel": 42.06
   },
   "stations": [
     {
@@ -12,9 +12,9 @@
       "city": "",
       "region": "Praha",
       "address": "",
-      "petrol_95": 43.02,
-      "diesel": 41.99,
-      "last_updated": "2026-05-17",
+      "petrol_95": 43.06,
+      "diesel": 41.98,
+      "last_updated": "2026-05-18",
       "id": 1
     },
     {
@@ -23,9 +23,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 42.22,
-      "diesel": 41.94,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.23,
+      "diesel": 41.89,
+      "last_updated": "2026-05-18",
       "id": 2
     },
     {
@@ -34,9 +34,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 42.22,
-      "diesel": 41.98,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.21,
+      "diesel": 41.94,
+      "last_updated": "2026-05-18",
       "id": 3
     },
     {
@@ -45,9 +45,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 42.29,
-      "diesel": 42.06,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.31,
+      "diesel": 42.03,
+      "last_updated": "2026-05-18",
       "id": 4
     },
     {
@@ -56,9 +56,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 41.88,
-      "diesel": 41.75,
-      "last_updated": "2026-05-17",
+      "petrol_95": 41.9,
+      "diesel": 41.6,
+      "last_updated": "2026-05-18",
       "id": 5
     },
     {
@@ -67,9 +67,9 @@
       "city": "",
       "region": "Olomoucký",
       "address": "",
-      "petrol_95": 42.06,
-      "diesel": 42.06,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.05,
+      "diesel": 41.99,
+      "last_updated": "2026-05-18",
       "id": 6
     },
     {
@@ -78,9 +78,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 41.56,
-      "diesel": 41.91,
-      "last_updated": "2026-05-17",
+      "petrol_95": 41.61,
+      "diesel": 41.84,
+      "last_updated": "2026-05-18",
       "id": 7
     },
     {
@@ -89,9 +89,9 @@
       "city": "",
       "region": "Plzeňský",
       "address": "",
-      "petrol_95": 42.19,
-      "diesel": 42.41,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.17,
+      "diesel": 42.38,
+      "last_updated": "2026-05-18",
       "id": 8
     },
     {
@@ -100,9 +100,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 42.75,
+      "petrol_95": 42.67,
       "diesel": 42.01,
-      "last_updated": "2026-05-17",
+      "last_updated": "2026-05-18",
       "id": 9
     },
     {
@@ -111,9 +111,9 @@
       "city": "",
       "region": "Liberecký",
       "address": "",
-      "petrol_95": 41.93,
-      "diesel": 42.05,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.01,
+      "diesel": 42.01,
+      "last_updated": "2026-05-18",
       "id": 10
     },
     {
@@ -122,9 +122,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 41.89,
-      "diesel": 41.72,
-      "last_updated": "2026-05-17",
+      "petrol_95": 41.92,
+      "diesel": 41.65,
+      "last_updated": "2026-05-18",
       "id": 11
     },
     {
@@ -133,9 +133,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 42.14,
-      "diesel": 42.06,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.12,
+      "diesel": 41.97,
+      "last_updated": "2026-05-18",
       "id": 12
     },
     {
@@ -144,9 +144,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 42.01,
-      "diesel": 42.31,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.06,
+      "diesel": 42.27,
+      "last_updated": "2026-05-18",
       "id": 13
     },
     {
@@ -155,9 +155,9 @@
       "city": "",
       "region": "Zlínský",
       "address": "",
-      "petrol_95": 41.64,
-      "diesel": 41.47,
-      "last_updated": "2026-05-17",
+      "petrol_95": 41.71,
+      "diesel": 41.37,
+      "last_updated": "2026-05-18",
       "id": 14
     },
     {
@@ -166,9 +166,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 42.13,
-      "diesel": 41.98,
-      "last_updated": "2026-05-17",
+      "petrol_95": 42.15,
+      "diesel": 41.92,
+      "last_updated": "2026-05-18",
       "id": 15
     },
     {
@@ -178,8 +178,8 @@
       "region": "Neznámý kraj",
       "address": "",
       "petrol_95": 42.13,
-      "diesel": 42.08,
-      "last_updated": "2026-05-17",
+      "diesel": 41.98,
+      "last_updated": "2026-05-18",
       "id": 16
     },
     {
@@ -190,7 +190,7 @@
       "address": "",
       "petrol_95": 42.13,
       "diesel": 42.49,
-      "last_updated": "2026-05-17",
+      "last_updated": "2026-05-18",
       "id": 17
     },
     {
@@ -201,7 +201,7 @@
       "address": "",
       "petrol_95": 42.16,
       "diesel": 42.83,
-      "last_updated": "2026-05-17",
+      "last_updated": "2026-05-18",
       "id": 18
     },
     {
@@ -212,19 +212,8 @@
       "address": "",
       "petrol_95": 42.16,
       "diesel": 43.03,
-      "last_updated": "2026-05-17",
+      "last_updated": "2026-05-18",
       "id": 19
-    },
-    {
-      "name": "11.05.2026",
-      "chain": "Ostatní",
-      "city": "",
-      "region": "Neznámý kraj",
-      "address": "",
-      "petrol_95": 42.15,
-      "diesel": 43.08,
-      "last_updated": "2026-05-17",
-      "id": 20
     }
   ]
 }
