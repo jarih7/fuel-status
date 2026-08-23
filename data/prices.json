@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-08-22T06:06:37Z",
+  "last_updated": "2026-08-23T06:07:51Z",
   "source": "tank-ono.cz + mbenzin.cz + ccs.cz + orlen.cz + omv.cz + fuelto.net + ipumpuj.cz + shell.cz + mol.cz + benzina.cz",
   "averages": {
-    "petrol_95": 39.94,
-    "diesel": 45.15
+    "petrol_95": 39.97,
+    "diesel": 45.22
   },
   "stations": [
     {
@@ -14,7 +14,7 @@
       "address": "",
       "petrol_95": 26.4,
       "diesel": 0.0,
-      "last_updated": "2026-08-22",
+      "last_updated": "2026-08-23",
       "id": 1
     },
     {
@@ -24,8 +24,8 @@
       "region": "Praha",
       "address": "",
       "petrol_95": 42.81,
-      "diesel": 46.38,
-      "last_updated": "2026-08-22",
+      "diesel": 46.4,
+      "last_updated": "2026-08-23",
       "id": 2
     },
     {
@@ -34,9 +34,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 42.07,
-      "diesel": 45.06,
-      "last_updated": "2026-08-22",
+      "petrol_95": 42.12,
+      "diesel": 45.15,
+      "last_updated": "2026-08-23",
       "id": 3
     },
     {
@@ -45,9 +45,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 41.37,
-      "diesel": 44.78,
-      "last_updated": "2026-08-22",
+      "petrol_95": 41.41,
+      "diesel": 44.82,
+      "last_updated": "2026-08-23",
       "id": 4
     },
     {
@@ -56,9 +56,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 41.96,
-      "diesel": 45.44,
-      "last_updated": "2026-08-22",
+      "petrol_95": 42.02,
+      "diesel": 45.47,
+      "last_updated": "2026-08-23",
       "id": 5
     },
     {
@@ -67,9 +67,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 41.59,
-      "diesel": 44.74,
-      "last_updated": "2026-08-22",
+      "petrol_95": 41.61,
+      "diesel": 44.85,
+      "last_updated": "2026-08-23",
       "id": 6
     },
     {
@@ -78,9 +78,9 @@
       "city": "",
       "region": "Liberecký",
       "address": "",
-      "petrol_95": 41.73,
-      "diesel": 44.8,
-      "last_updated": "2026-08-22",
+      "petrol_95": 41.76,
+      "diesel": 44.91,
+      "last_updated": "2026-08-23",
       "id": 7
     },
     {
@@ -89,9 +89,9 @@
       "city": "",
       "region": "Neznámý kraj",
       "address": "",
-      "petrol_95": 41.59,
-      "diesel": 44.82,
-      "last_updated": "2026-08-22",
+      "petrol_95": 41.61,
+      "diesel": 44.92,
+      "last_updated": "2026-08-23",
       "id": 8
     }
   ]
